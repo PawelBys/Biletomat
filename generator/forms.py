@@ -14,6 +14,7 @@ class BiletForm(forms.Form):
     MIESIACE = ( ('styczeń', 'styczeń'), ('luty', 'luty'), ('marzec', 'marzec'), ('kwiecień', 'kwiecień'), ('maj', 'maj'), ('czerwiec', 'czerwiec'), ('lipiec', 'lipiec'), ('sierpień', 'sierpień'), ('wrzesień', 'wrzesień'), ('październik', 'październik'), ('listopad', 'listopad'), ('grudzień', 'grudzień'))
     STOPNIE = ( ('szer. pchor.', 'szer. pchor.'), ('st. szer. pchor.', 'st. szer. pchor.'), ('kpr. pchor.', 'kpr. pchor.'), ('st. kpr. pchor.', 'st. kpr. pchor.'), ('plut. pchor.', 'plut. pchor.'), ('sierż. pchor.', 'sierż. pchor.'))
     TYP = (('przepustkę jednorazową', 'PJ'), ('urlop', 'Urlop'))
+    TAM = (('', 'tam'), (' i z powrotem', 'tam i z powrotem'))
     POCIAGI = ("osobowym", "Osobowy"), ("pospiesznym", "TLK"), ("ekspresowym", "IC/EIC/EIP")
     AUTOBUSY = ("zwykłej", "Zwykły"), ("przyspieszonej", "Przyspieszony")
 
@@ -24,11 +25,12 @@ class BiletForm(forms.Form):
     pluton = forms.CharField(widget=forms.Select(choices=PLUTONY))
     data_wyjazdu = forms.DateField(widget=DateInput(), initial=date.today())
     data_powrotu = forms.DateField( widget=DateInput(), initial=date.today())
+    tam_z_powrotem = forms.CharField(widget=forms.Select(choices=TAM))
     miasto = forms.CharField(max_length=30)
     miesiac = forms.CharField(widget=forms.Select(choices=MIESIACE))
     typ_pociagu = forms.MultipleChoiceField(choices=POCIAGI, widget=forms.CheckboxSelectMultiple, required=False)
     typ_autobusu = forms.MultipleChoiceField(choices=AUTOBUSY, widget=forms.CheckboxSelectMultiple, required=False)
     kwota = forms.DecimalField(decimal_places=2, max_digits=10)
-    kwota_slownie = forms.CharField(widget=forms.TextInput(attrs= {"cols": 60}) )
+
 
 

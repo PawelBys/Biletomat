@@ -8,7 +8,7 @@ from django.utils.dateparse import parse_date
 
 from .forms import BiletForm
 from docxtpl import DocxTemplate
-
+from generator.kwotaslownie import kwotaslownie
 
 # ze zmiennej request zbiera się informacje, np kto jest zalogowany
 
@@ -34,17 +34,18 @@ def generuj(request):
     sample_pj = os.path.join(THIS_FOLDER, 'sample_pj.docx')
     sample_ur = os.path.join(THIS_FOLDER, 'sample_ur.docx')
     generated_doc = os.path.join(THIS_FOLDER, 'generated_doc.docx')
+
     if request.method == "POST":
         form = BiletForm(request.POST)
         if form.is_valid():
             typ_pociagu = form.cleaned_data.get('typ_pociagu')
             typ_autobusu = form.cleaned_data.get('typ_autobusu')
             temp_typ_srodka = ""
+            kwota = float(request.POST.get('kwota'))
             if typ_pociagu:
                 srodek = "kolejowym w klasie 2, w pociągu "
                 for i in typ_pociagu:
                     temp_typ_srodka += i + ", "
-
             else:
                 srodek = "autobusowym w komunikacji "
                 for i in typ_autobusu:
@@ -63,11 +64,12 @@ def generuj(request):
                         'data_powrotu':request.POST.get('data_powrotu'),
                         'miesiac':request.POST.get('miesiac'),
                         'miejscowosc':request.POST.get('miasto'),
-                        'kwota':request.POST.get('kwota'),
-                        'kwota_slownie':request.POST.get('kwota_slownie'),
+                        'kwota':kwota,
+                        'kwota_slownie':kwotaslownie(kwota, 1),
                         'typ': request.POST.get('typ'),
                        'typ_srodka': typ_srodka,
                        'srodek': srodek,
+                        'powrot':request.POST.get('tam_z_powrotem'),
 
                        }
             doc.render(context)
