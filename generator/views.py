@@ -1,3 +1,4 @@
+import os
 from datetime import date, timedelta
 from time import strftime
 
@@ -30,13 +31,18 @@ def test(request):
 
 def generuj(request):
     form = BiletForm()
+    THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+    sample_pj = os.path.join(THIS_FOLDER, 'sample_pj.docx')
+    sample_ur = os.path.join(THIS_FOLDER, 'sample_ur.docx')
+    generated_doc = os.path.join(THIS_FOLDER, 'generated_doc.docx')
     if request.method == "POST":
         form = BiletForm(request.POST)
         if form.is_valid():
             if request.POST.get('typ') == 'pj':
-                doc = DocxTemplate("/home/bilety5kmp/Biletomat/sample_pj.docx")
+
+                doc = DocxTemplate(open(sample_pj,"rb"))
             elif request.POST.get('typ') == 'ur':
-                doc = DocxTemplate("/home/bilety5kmp/Biletomat/sample_ur.docx")
+                doc = DocxTemplate(open(sample_ur,"rb"))
             context = {'stopien': request.POST.get('stopien'),
                        'imie':request.POST.get('imie'),
                        'nazwisko':request.POST.get('nazwisko'),
@@ -52,8 +58,8 @@ def generuj(request):
 
                        }
             doc.render(context)
-            doc.save("/home/bilety5kmp/Biletomat/generated_doc.docx")
-            response = HttpResponse(open("/home/bilety5kmp/Biletomat/generated_doc.docx", 'rb').read())
+            doc.save(generated_doc)
+            response = HttpResponse(open(generated_doc, 'rb').read())
             response['Content-Type'] = 'text/plain'
             response['Content-Disposition'] = 'attachment; filename=pobrane.docx'
             return response
