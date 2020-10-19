@@ -16,8 +16,7 @@ class BiletForm(forms.Form):
     TYP = (('pj', 'PJ'), ('ur', 'Urlop'))
 
     typ = forms.CharField(widget=forms.Select(choices=TYP))
-    imie = forms.CharField(max_length=30)
-    nazwisko = forms.CharField(max_length=30)
+    imie_nazwisko = forms.CharField(max_length=50)
     stopien = forms.CharField(widget=forms.Select(choices=STOPNIE))
     adres = forms.CharField(max_length=100, initial='ul. Kolejowa 7/23, 01-476 Warszawa')
     pluton = forms.CharField(widget=forms.Select(choices=PLUTONY))

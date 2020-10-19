@@ -1,6 +1,6 @@
 import os
-from datetime import date, timedelta
-from time import strftime
+from datetime import timedelta
+
 
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -9,7 +9,6 @@ from django.utils.dateparse import parse_date
 from .forms import BiletForm
 from docxtpl import DocxTemplate
 
-##### TEST #########
 
 # ze zmiennej request zbiera się informacje, np kto jest zalogowany
 
@@ -44,8 +43,7 @@ def generuj(request):
             elif request.POST.get('typ') == 'ur':
                 doc = DocxTemplate(open(sample_ur,"rb"))
             context = {'stopien': request.POST.get('stopien'),
-                       'imie':request.POST.get('imie'),
-                       'nazwisko':request.POST.get('nazwisko'),
+                       'imie_nazwisko':request.POST.get('imie_nazwisko'),
                        'adres':request.POST.get('adres'),
                        'pluton':request.POST.get('pluton'),
                         'data_przed': parse_date(request.POST.get('data_wyjazdu'))-timedelta(days=1),
