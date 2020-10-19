@@ -13,7 +13,7 @@ class BiletForm(forms.Form):
     PLUTONY = ((1, 1), (2, 2), (3, 3), (4, 4), (5, 5))
     MIESIACE = ( ('styczeń', 'styczeń'), ('luty', 'luty'), ('marzec', 'marzec'), ('kwiecień', 'kwiecień'), ('maj', 'maj'), ('czerwiec', 'czerwiec'), ('lipiec', 'lipiec'), ('sierpień', 'sierpień'), ('wrzesień', 'wrzesień'), ('październik', 'październik'), ('listopad', 'listopad'), ('grudzień', 'grudzień'))
     STOPNIE = ( ('szer. pchor.', 'szer. pchor.'), ('st. szer. pchor.', 'st. szer. pchor.'), ('kpr. pchor.', 'kpr. pchor.'), ('st. kpr. pchor.', 'st. kpr. pchor.'), ('plut. pchor.', 'plut. pchor.'), ('sierż. pchor.', 'sierż. pchor.'))
-    TYP = (('pj', 'PJ'), ('ur', 'Urlop'))
+    TYP = (('przepustkę jednorazową', 'PJ'), ('urlop', 'Urlop'))
 
     typ = forms.CharField(widget=forms.Select(choices=TYP))
     imie_nazwisko = forms.CharField(max_length=50)

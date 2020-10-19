@@ -37,10 +37,9 @@ def generuj(request):
     if request.method == "POST":
         form = BiletForm(request.POST)
         if form.is_valid():
-            if request.POST.get('typ') == 'pj':
-
+            if request.POST.get('typ') == 'przepustkę jednorazową':
                 doc = DocxTemplate(open(sample_pj,"rb"))
-            elif request.POST.get('typ') == 'ur':
+            elif request.POST.get('typ') == 'urlop':
                 doc = DocxTemplate(open(sample_ur,"rb"))
             context = {'stopien': request.POST.get('stopien'),
                        'imie_nazwisko':request.POST.get('imie_nazwisko'),
@@ -53,7 +52,7 @@ def generuj(request):
                         'miejscowosc':request.POST.get('miasto'),
                         'kwota':request.POST.get('kwota'),
                         'kwota_slownie':request.POST.get('kwota_slownie'),
-
+                        'typ': request.POST.get('typ'),
                        }
             doc.render(context)
             doc.save(generated_doc)
