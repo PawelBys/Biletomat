@@ -8,7 +8,7 @@ from django.utils.dateparse import parse_date
 from .forms import BiletForm
 from docxtpl import DocxTemplate
 
-
+##### TEST #########
 
 # ze zmiennej request zbiera się informacje, np kto jest zalogowany
 
