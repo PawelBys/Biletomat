@@ -37,6 +37,19 @@ def generuj(request):
     if request.method == "POST":
         form = BiletForm(request.POST)
         if form.is_valid():
+            typ_pociagu = form.cleaned_data.get('typ_pociagu')
+            typ_autobusu = form.cleaned_data.get('typ_autobusu')
+            temp_typ_srodka = ""
+            if typ_pociagu:
+                srodek = "kolejowym w klasie 2, w pociągu "
+                for i in typ_pociagu:
+                    temp_typ_srodka += i + ", "
+
+            else:
+                srodek = "autobusowym w komunikacji "
+                for i in typ_autobusu:
+                    temp_typ_srodka += i + ", "
+            typ_srodka = temp_typ_srodka[:-2]
             if request.POST.get('typ') == 'przepustkę jednorazową':
                 doc = DocxTemplate(open(sample_pj,"rb"))
             elif request.POST.get('typ') == 'urlop':
@@ -53,6 +66,9 @@ def generuj(request):
                         'kwota':request.POST.get('kwota'),
                         'kwota_slownie':request.POST.get('kwota_slownie'),
                         'typ': request.POST.get('typ'),
+                       'typ_srodka': typ_srodka,
+                       'srodek': srodek,
+
                        }
             doc.render(context)
             doc.save(generated_doc)
