@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'generator',
     'templated_docs',
-
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

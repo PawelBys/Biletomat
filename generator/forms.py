@@ -25,7 +25,7 @@ class BiletForm(forms.Form):
     pluton = forms.CharField(widget=forms.Select(choices=PLUTONY))
     data_wyjazdu = forms.DateField(widget=DateInput(), initial=date.today())
     data_powrotu = forms.DateField( widget=DateInput(), initial=date.today())
-    tam_z_powrotem = forms.CharField(widget=forms.Select(choices=TAM))
+    tam_z_powrotem = forms.CharField(widget=forms.Select(choices=TAM), required=False)
     miasto = forms.CharField(max_length=30)
     miesiac = forms.CharField(widget=forms.Select(choices=MIESIACE))
     typ_pociagu = forms.MultipleChoiceField(choices=POCIAGI, widget=forms.CheckboxSelectMultiple, required=False)
