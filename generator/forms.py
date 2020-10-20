@@ -23,7 +23,7 @@ class BiletForm(forms.Form):
     stopien = forms.CharField(widget=forms.Select(choices=STOPNIE), label="Stopień")
     adres = forms.CharField(max_length=100, initial='', help_text="WZÓR: ul. Kolejowa 7/23, 01-476 Warszawa")
     pluton = forms.CharField(widget=forms.Select(choices=PLUTONY))
-    data_wyjazdu = forms.DateField(widget=DateInput(), initial=date.today())
+    data_wyjazdu = forms.DateField(widget=DateInput(), initial=date.today(), help_text="Data z blankietu (np. sobota, nie piątek)")
     data_powrotu = forms.DateField( widget=DateInput(), initial=date.today())
     tam_z_powrotem = forms.CharField(widget=forms.Select(choices=TAM), required=False, label="Tam/Tam i z powrotem", help_text="Czy składasz wniosek z biletem w jedną, czy w obie strony?")
     miasto = forms.CharField(max_length=30, label="Miasto (z biletu)")
