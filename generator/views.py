@@ -1,7 +1,7 @@
 import os
 from datetime import timedelta
 
-
+from django.core.exceptions import ValidationError
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.utils.dateparse import parse_date
@@ -16,15 +16,6 @@ def home_view(request, *args, **kwargs):
 
     return render(request, "home.html")
 
-def test(request):
-    doc = DocxTemplate("sample.docx")
-    context = { 'chuj': request.user }
-    doc.render(context)
-    doc.save("generated_doc.docx")
-    response = HttpResponse(open("generated_doc.docx", 'rb').read())
-    response['Content-Type'] = 'text/plain'
-    response['Content-Disposition'] = 'attachment; filename=pobrane.docx'
-    return response
 
 
 
@@ -46,10 +37,12 @@ def generuj(request):
                 srodek = "kolejowym w klasie 2, w pociągu "
                 for i in typ_pociagu:
                     temp_typ_srodka += i + ", "
-            else:
+            elif typ_autobusu:
                 srodek = "autobusowym w komunikacji "
                 for i in typ_autobusu:
                     temp_typ_srodka += i + ", "
+            else:
+                ValidationError('Invalid value', code='invalid')
             typ_srodka = temp_typ_srodka[:-2]
             if request.POST.get('typ') == 'przepustkę jednorazową':
                 doc = DocxTemplate(open(sample_pj,"rb"))

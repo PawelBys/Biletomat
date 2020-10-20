@@ -19,18 +19,18 @@ class BiletForm(forms.Form):
     AUTOBUSY = ("zwykłej", "Zwykły"), ("przyspieszonej", "Przyspieszony")
 
     typ = forms.CharField(widget=forms.Select(choices=TYP))
-    imie_nazwisko = forms.CharField(max_length=50)
-    stopien = forms.CharField(widget=forms.Select(choices=STOPNIE))
-    adres = forms.CharField(max_length=100, initial='ul. Kolejowa 7/23, 01-476 Warszawa')
+    imie_nazwisko = forms.CharField(max_length=50, label="Imię i nazwisko")
+    stopien = forms.CharField(widget=forms.Select(choices=STOPNIE), label="Stopień")
+    adres = forms.CharField(max_length=100, initial='', help_text="WZÓR: ul. Kolejowa 7/23, 01-476 Warszawa")
     pluton = forms.CharField(widget=forms.Select(choices=PLUTONY))
     data_wyjazdu = forms.DateField(widget=DateInput(), initial=date.today())
     data_powrotu = forms.DateField( widget=DateInput(), initial=date.today())
-    tam_z_powrotem = forms.CharField(widget=forms.Select(choices=TAM), required=False)
-    miasto = forms.CharField(max_length=30)
-    miesiac = forms.CharField(widget=forms.Select(choices=MIESIACE))
-    typ_pociagu = forms.MultipleChoiceField(choices=POCIAGI, widget=forms.CheckboxSelectMultiple, required=False)
-    typ_autobusu = forms.MultipleChoiceField(choices=AUTOBUSY, widget=forms.CheckboxSelectMultiple, required=False)
-    kwota = forms.DecimalField(decimal_places=2, max_digits=10)
+    tam_z_powrotem = forms.CharField(widget=forms.Select(choices=TAM), required=False, label="Tam/Tam i z powrotem", help_text="Czy składasz wniosek z biletem w jedną, czy w obie strony?")
+    miasto = forms.CharField(max_length=30, label="Miasto (z biletu)")
+    miesiac = forms.CharField(widget=forms.Select(choices=MIESIACE), label="Miesiąc", help_text="Miesiąc za jaki chcesz otrzymać należność")
+    typ_pociagu = forms.MultipleChoiceField(choices=POCIAGI, widget=forms.CheckboxSelectMultiple(attrs={'class':'czekbox'}), required=False, label="Typ pociągu")
+    typ_autobusu = forms.MultipleChoiceField(choices=AUTOBUSY, widget=forms.CheckboxSelectMultiple(attrs={'class':'czekbox'}), required=False)
+    kwota = forms.DecimalField(decimal_places=2, max_digits=10, label="Suma kwot z biletów")
 
 
 
