@@ -13,6 +13,7 @@
     Aktualnie wypełnili formularz:
     <table border="1px">
     <tr>
+        <th>Stopień</th>
         <th>Imię</th>
         <th>Nazwisko</th>
         <th>Data wyjazdu</th>
@@ -22,9 +23,9 @@
     {% for q in lista %}
     <tr>
 
-
+        <td> {{ q.stopien }}</td>
         <td> {{ q.imie }} </td>
-        <td> {{ q.nazwisko }} </td>
+        <td> {{ q.nazwisko.upper }} </td>
         <td> {{ q.data_wyjazdu }} </td>
         <td> {{ q.data_powrotu }} </td>
         <td> {{ q.miasto }} </td>
