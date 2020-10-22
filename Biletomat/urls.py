@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from generator.views import home_view, panel, generuj
+from generator.views import home_view, panel, generuj, info
 # tutaj dodaje się kolejne "widoki" - podstrony, trzeba je mieć w pliku views jako funkcję
 urlpatterns = [
     path('home/', home_view, name='home_view'),
@@ -23,4 +23,5 @@ urlpatterns = [
     path('panel/', panel, name='panel'),
     path('admin/', admin.site.urls),
     path('generuj/', generuj, name='generuj'),
+    path('info/', info, name='info')
 ]

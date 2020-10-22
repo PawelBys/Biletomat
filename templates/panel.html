@@ -7,9 +7,35 @@
 
 
 
-Witaj w panelu sterowania
+<h1>Witaj w panelu sterowania</h1>
+<!--spróbuj już tutaj posortować-->
+<p>
+    Aktualnie wypełnili formularz:
+    <table border="1px">
+    <tr>
+        <th>Imię</th>
+        <th>Nazwisko</th>
+        <th>Data wyjazdu</th>
+        <th>Data powrotu</th>
+        <th>Miasto</th>
+    </tr>
+    {% for q in lista %}
+    <tr>
 
 
+        <td> {{ q.imie }} </td>
+        <td> {{ q.nazwisko }} </td>
+        <td> {{ q.data_wyjazdu }} </td>
+        <td> {{ q.data_powrotu }} </td>
+        <td> {{ q.miasto }} </td>
+
+    </tr>
+    {% endfor %}
+
+</table>
+
+
+</p>
 
 
 {% endblock %}

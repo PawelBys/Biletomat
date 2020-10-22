@@ -87,9 +87,6 @@ def generuj(request):
         doc.render(context)
         doc.save(generated_doc)
 
-       # webbrowser.open_new_tab(generated_doc)
-
-
         response = HttpResponse(open(generated_doc, 'rb').read())
         response['Content-Type'] = 'text/plain'
         response['Content-Disposition'] = 'attachment; filename=pobrane.docx'
@@ -100,8 +97,14 @@ def generuj(request):
     }
     return render(request, "generate.html", context)
 
+def info(request, *args, **kwargs):
 
+    return render(request, "info.html")
 
 def panel(request, *args, **kwargs):
+    queryset = Dane.objects.all()
 
-    return render(request, "panel.html")
+    context = {
+        "lista": queryset,
+    }
+    return render(request, "panel.html", context)
