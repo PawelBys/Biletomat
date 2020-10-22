@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import DateInput
 
 
@@ -18,6 +19,17 @@ class BiletForm(forms.Form):
     POCIAGI = ("osobowym", "Osobowy"), ("pospiesznym", "TLK"), ("ekspresowym", "IC/EIC/EIP")
     AUTOBUSY = ("zwykłej", "Zwykły"), ("przyspieszonej", "Przyspieszony")
 
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        end_date = cleaned_data.get('data_przyjazdu')
+        start_date = cleaned_data.get('data_wyjazdu')
+        if end_date and start_date:
+            if end_date < start_date:
+                self.add_error('data_przyjazdu', 'Event end date should not occur before start date.')
+        return cleaned_data
+
+
     typ = forms.CharField(widget=forms.Select(choices=TYP))
     imie_nazwisko = forms.CharField(max_length=50, label="Imię i nazwisko")
     stopien = forms.CharField(widget=forms.Select(choices=STOPNIE), label="Stopień")
@@ -31,6 +43,5 @@ class BiletForm(forms.Form):
     typ_pociagu = forms.MultipleChoiceField(choices=POCIAGI, widget=forms.CheckboxSelectMultiple(attrs={'class':'czekbox'}), required=False, label="Typ pociągu")
     typ_autobusu = forms.MultipleChoiceField(choices=AUTOBUSY, widget=forms.CheckboxSelectMultiple(attrs={'class':'czekbox'}), required=False)
     kwota = forms.DecimalField(decimal_places=2, max_digits=10, label="Suma kwot z biletów")
-
 
 

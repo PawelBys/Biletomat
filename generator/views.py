@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.utils.dateparse import parse_date
-
+import webbrowser
 from .forms import BiletForm
 from docxtpl import DocxTemplate
 from generator.kwotaslownie import kwotaslownie
@@ -15,8 +15,6 @@ from generator.kwotaslownie import kwotaslownie
 def home_view(request, *args, **kwargs):
 
     return render(request, "home.html")
-
-
 
 
 def generuj(request):
@@ -32,6 +30,8 @@ def generuj(request):
             typ_pociagu = form.cleaned_data.get('typ_pociagu')
             typ_autobusu = form.cleaned_data.get('typ_autobusu')
             temp_typ_srodka = ""
+            srodek=""
+
             kwota = float(request.POST.get('kwota'))
             if typ_pociagu:
                 srodek = "kolejowym w klasie 2, w pociągu "
@@ -41,8 +41,8 @@ def generuj(request):
                 srodek = "autobusowym w komunikacji "
                 for i in typ_autobusu:
                     temp_typ_srodka += i + ", "
-            else:
-                ValidationError('Invalid value', code='invalid')
+
+
             typ_srodka = temp_typ_srodka[:-2]
             if request.POST.get('typ') == 'przepustkę jednorazową':
                 doc = DocxTemplate(open(sample_pj,"rb"))
@@ -67,10 +67,15 @@ def generuj(request):
                        }
             doc.render(context)
             doc.save(generated_doc)
+
+           # webbrowser.open_new_tab(generated_doc)
+
+
             response = HttpResponse(open(generated_doc, 'rb').read())
             response['Content-Type'] = 'text/plain'
             response['Content-Disposition'] = 'attachment; filename=pobrane.docx'
             return response
+
     context = {
         "form": form
     }

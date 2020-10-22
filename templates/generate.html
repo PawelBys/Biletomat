@@ -6,8 +6,8 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
   <title>Simple is Better Than Complex</title>
   <style>
-    czekbox{
-      width:50px !important;
+    .czekbox {
+      width: 5px;
     }
   </style>
   </head>
@@ -35,16 +35,14 @@
         <th style="text-align:right">{{ field.label_tag }}</th>
         <td style="padding:5px">
 
-
-          {{ field.errors }}
-
           {% render_field field style="width:300px"  %}
-
+          {{ field.errors }}
           <br>
           {{ field.help_text }}
         </td>
       </tr>
     {% endfor %}
+
   </table>
 
   <button type="submit">Submit</button>
