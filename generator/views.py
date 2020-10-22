@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.utils.dateparse import parse_date
-import webbrowser
+from generator.models import Dane
 from .forms import BiletForm
 from docxtpl import DocxTemplate
 from generator.kwotaslownie import kwotaslownie
@@ -48,8 +48,16 @@ def generuj(request):
                 doc = DocxTemplate(open(sample_pj,"rb"))
             elif request.POST.get('typ') == 'urlop':
                 doc = DocxTemplate(open(sample_ur,"rb"))
-            context = {'stopien': request.POST.get('stopien'),
-                       'imie_nazwisko':request.POST.get('imie_nazwisko'),
+            data_wyjazdu = request.POST.get('data_wyjazdu')
+            data_powrotu = request.POST.get('data_powrotu')
+            miasto = request.POST.get('miasto')
+            stopien = request.POST.get('stopien')
+            imie = request.POST.get('imie')
+            nazwisko = request.POST.get('nazwisko')
+
+        context = {'stopien': request.POST.get('stopien'),
+                       'imie':request.POST.get('imie'),
+                       'nazwisko':request.POST.get('nazwisko'),
                        'adres':request.POST.get('adres'),
                        'pluton':request.POST.get('pluton'),
                         'data_przed': parse_date(request.POST.get('data_wyjazdu'))-timedelta(days=1),
@@ -65,16 +73,27 @@ def generuj(request):
                         'powrot':request.POST.get('tam_z_powrotem'),
 
                        }
-            doc.render(context)
-            doc.save(generated_doc)
+        q = Dane.objects.filter(imie=imie, nazwisko=nazwisko)
+        if q.exists():  # jeśli obiekt istnieje, zaktualizuj jego dane
+            dana = Dane.objects.get(imie=imie)
+            dana.data_wyjazdu = data_wyjazdu
+            dana.data_powrotu = data_powrotu
+            dana.miasto = miasto
+            dana.stopien = stopien
+            dana.save()
+        else:
+            rekord = Dane(data_wyjazdu = data_wyjazdu, data_powrotu=data_powrotu, miasto=miasto, stopien=stopien, imie=imie, nazwisko=nazwisko)
+            rekord.save()
+        doc.render(context)
+        doc.save(generated_doc)
 
-           # webbrowser.open_new_tab(generated_doc)
+       # webbrowser.open_new_tab(generated_doc)
 
 
-            response = HttpResponse(open(generated_doc, 'rb').read())
-            response['Content-Type'] = 'text/plain'
-            response['Content-Disposition'] = 'attachment; filename=pobrane.docx'
-            return response
+        response = HttpResponse(open(generated_doc, 'rb').read())
+        response['Content-Type'] = 'text/plain'
+        response['Content-Disposition'] = 'attachment; filename=pobrane.docx'
+        return response
 
     context = {
         "form": form
@@ -84,7 +103,5 @@ def generuj(request):
 
 
 def panel(request, *args, **kwargs):
-    context = {
-        "zmienna": "abcdefg"
-    }
-    return render(request, "panel.html", context)
+
+    return render(request, "panel.html")
