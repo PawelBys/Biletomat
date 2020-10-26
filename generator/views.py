@@ -186,7 +186,7 @@ def rozkaz(request):
 
 
     #download
-    document.save('demo.docx')
+    document.save(generated_rozkaz)
     response = HttpResponse(open(generated_rozkaz, 'rb').read())
     response['Content-Type'] = 'text/plain'
     response['Content-Disposition'] = 'attachment; filename=rozkaz.docx'
