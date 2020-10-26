@@ -34,7 +34,7 @@
     {% endfor %}
 
 </table>
-<form action="{% url 'download_rozkaz' %}" method="POST">
+<form action="{% url 'rozkaz' %}" method="POST">
     {% csrf_token %}
     <button type="submit">Generuj rozkaz</button>
 </form>

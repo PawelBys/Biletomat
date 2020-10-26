@@ -25,5 +25,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('generuj/', generuj, name='generuj'),
     path('info/', info, name='info'),
-    path('rozkaz/', rozkaz, name='download_rozkaz'),
+    path('rozkaz/', rozkaz, name='rozkaz'),
 ]
