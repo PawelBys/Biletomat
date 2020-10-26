@@ -32,6 +32,7 @@ ALLOWED_HOSTS = [  "bilety5kmp.pythonanywhere.com", "127.0.0.1"]
 # Application definition
 
 INSTALLED_APPS = [
+    'widget_tweaks',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'generator',
-    'widget_tweaks',
+
 ]
 
 MIDDLEWARE = [

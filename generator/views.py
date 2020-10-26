@@ -129,6 +129,7 @@ def rozkaz(request):
 
     #for stopien, imie, nazwisko, data_wyjazdu, data_przyjazdu, miasto in queryset:
     for i in queryset:
+        print(i)
         # formatowanie daty
         data = 'w dn. '
         if str(i.data_powrotu)[5:7] == str(i.data_wyjazdu)[5:7]:
