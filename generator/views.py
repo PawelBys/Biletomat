@@ -1,11 +1,11 @@
 import os
-from datetime import timedelta, date
-
-from django.core.exceptions import ValidationError
+from datetime import timedelta
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.utils.dateparse import parse_date
 from docx import Document
+from docx.shared import Inches, Cm, Pt
+from docx.text import font
 
 from generator.models import Dane
 from .forms import BiletForm
@@ -94,6 +94,9 @@ def generuj(request):
         response = HttpResponse(open(generated_doc, 'rb').read())
         response['Content-Type'] = 'text/plain'
         response['Content-Disposition'] = 'attachment; filename=pobrane.docx'
+
+
+
         return response
 
     context = {
@@ -120,6 +123,7 @@ def rozkaz(request):
     document = Document()
     table = document.add_table(rows=0, cols=7)
     lp = 1
+
     for stopien, imie, nazwisko, data_wyjazdu, data_przyjazdu, miasto in queryset:
         # formatowanie daty
         data = 'w dn. '
@@ -127,18 +131,51 @@ def rozkaz(request):
             data += str(data_wyjazdu)[8:10] + ' - '
         else:
             data += str(data_wyjazdu)[8:10] + '.' + str(data_wyjazdu)[5:7] + ' - '
-        data += str(data_przyjazdu)[8:10] + '.' + str(data_wyjazdu)[5:7] + '.' + str(data_wyjazdu)[0:4]
-
+        data += str(data_przyjazdu)[8:10] + '.' + str(data_wyjazdu)[5:7] + '.' + str(data_wyjazdu)[0:4] + ' r.'
+        # wpisywanie danych do tabeli
         komorki = table.add_row().cells
-        komorki[0].text = str(lp)
+        komorki[0].text = str(lp) + ')'
         komorki[1].text = stopien
         komorki[2].text = imie
-        komorki[3].text = nazwisko
+        komorki[3].text = str(nazwisko).upper()
         komorki[4].text = data
         komorki[5].text = 'do m.'
         komorki[6].text = miasto
         lp += 1
+    #ustawianie parametrów dokumentu
+    style = document.styles['Normal']
+    font = style.font
+    font.name = 'Times New Roman'
+    font.size = Pt(12)
 
+    i=1
+    for row in table.rows:
+        j=1
+        for cell in row.cells:
+            if j == 1: # 1)
+                cell.width = Inches(0.1)
+            if j == 2: # stopien
+                cell.width = Inches(1.2)
+            if j == 3: # imie
+                cell.width = Inches(1)
+            if j == 4: # nazwisko
+                cell.width = Inches(1.2)
+            if j == 5:
+                cell.width = Inches(2.5)
+            if j == 6:
+                cell.width = Inches(0.8)
+            if j == 7:
+                cell.width = Inches(1.2)
+            j+=1
+        i+=1
+
+    margin = 1
+    sections = document.sections
+    for section in sections:
+        section.top_margin = Cm(margin)
+        section.bottom_margin = Cm(margin)
+        section.left_margin = Cm(margin)
+        section.right_margin = Cm(margin)
 
 
 
