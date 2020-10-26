@@ -122,7 +122,7 @@ def rozkaz(request):
 
     #queryset = Dane.objects.values_list('stopien', 'imie', 'nazwisko', 'data_wyjazdu', 'data_powrotu', 'miasto') # ogranicz to do wpisów z ostatnich 3 dni
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
-    generated_rozkaz = os.path.join(THIS_FOLDER, os.pardir, 'demo.docx')
+    generated_rozkaz = os.path.join(THIS_FOLDER, 'demo.docx')
     document = Document()
     table = document.add_table(rows=0, cols=7)
     lp = 1
@@ -186,7 +186,7 @@ def rozkaz(request):
 
 
     #download
-    document.save('./Biletomat/demo.docx')
+    document.save(generated_rozkaz)
     response = HttpResponse(open(generated_rozkaz, 'rb').read())
     response['Content-Type'] = 'text/plain'
     response['Content-Disposition'] = 'attachment; filename=rozkaz.docx'
