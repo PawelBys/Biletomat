@@ -1,10 +1,12 @@
 import os
-from datetime import timedelta
+from datetime import timedelta, date
 
 from django.core.exceptions import ValidationError
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.utils.dateparse import parse_date
+from docx import Document
+
 from generator.models import Dane
 from .forms import BiletForm
 from docxtpl import DocxTemplate
@@ -73,6 +75,7 @@ def generuj(request):
                         'powrot':request.POST.get('tam_z_powrotem'),
 
                        }
+        #tworzenie obiektu bazy danych
         q = Dane.objects.filter(imie=imie, nazwisko=nazwisko)
         if q.exists():  # jeśli obiekt istnieje, zaktualizuj jego dane
             dana = Dane.objects.get(imie=imie)
@@ -87,6 +90,7 @@ def generuj(request):
         doc.render(context)
         doc.save(generated_doc)
 
+        # download
         response = HttpResponse(open(generated_doc, 'rb').read())
         response['Content-Type'] = 'text/plain'
         response['Content-Disposition'] = 'attachment; filename=pobrane.docx'
@@ -108,3 +112,40 @@ def panel(request, *args, **kwargs):
         "lista": queryset,
     }
     return render(request, "panel.html", context)
+
+def rozkaz(request):
+    queryset = Dane.objects.values_list('stopien', 'imie', 'nazwisko', 'data_wyjazdu', 'data_powrotu', 'miasto') # ogranicz to do wpisów z ostatnich 3 dni
+    THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+    generated_rozkaz = os.path.join(THIS_FOLDER, os.pardir, 'demo.docx')
+    document = Document()
+    table = document.add_table(rows=0, cols=7)
+    lp = 1
+    for stopien, imie, nazwisko, data_wyjazdu, data_przyjazdu, miasto in queryset:
+        # formatowanie daty
+        data = 'w dn. '
+        if str(data_przyjazdu)[5:7] == str(data_wyjazdu)[5:7]:
+            data += str(data_wyjazdu)[8:10] + ' - '
+        else:
+            data += str(data_wyjazdu)[8:10] + '.' + str(data_wyjazdu)[5:7] + ' - '
+        data += str(data_przyjazdu)[8:10] + '.' + str(data_wyjazdu)[5:7] + '.' + str(data_wyjazdu)[0:4]
+
+        komorki = table.add_row().cells
+        komorki[0].text = str(lp)
+        komorki[1].text = stopien
+        komorki[2].text = imie
+        komorki[3].text = nazwisko
+        komorki[4].text = data
+        komorki[5].text = 'do m.'
+        komorki[6].text = miasto
+        lp += 1
+
+
+
+
+
+    #download
+    document.save('demo.docx')
+    response = HttpResponse(open(generated_rozkaz, 'rb').read())
+    response['Content-Type'] = 'text/plain'
+    response['Content-Disposition'] = 'attachment; filename=rozkaz.docx'
+    return response
