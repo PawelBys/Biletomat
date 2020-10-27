@@ -1,5 +1,5 @@
 import os
-from datetime import timedelta
+from datetime import timedelta, date
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.utils.dateparse import parse_date
@@ -57,6 +57,17 @@ def generuj(request):
             imie = request.POST.get('imie')
             nazwisko = request.POST.get('nazwisko')
 
+            #liczenie nr rozkazu batalionowego
+            wstepna_data = parse_date(request.POST.get('data_wyjazdu'))
+            if wstepna_data.weekday() == 5:
+                data_rozkazu = wstepna_data-timedelta(days=2)
+            else:
+                data_rozkazu = wstepna_data - timedelta(days=1)
+
+            # dnia 24.09.2020 był nr rozkazu 76
+            # odejmij datę wyjazdu od 24.09, uzyskane dni pocziel na 7 i pomnóż razy 2 - spodziewana liczba wydanych rozkazow
+            nr_rozkazu = int(76 + (((data_rozkazu-date(2020, 9, 24)).days+1)/7)*2)
+
         context = {'stopien': request.POST.get('stopien'),
                        'imie':request.POST.get('imie'),
                        'nazwisko':request.POST.get('nazwisko'),
@@ -73,12 +84,14 @@ def generuj(request):
                        'typ_srodka': typ_srodka,
                        'srodek': srodek,
                         'powrot':request.POST.get('tam_z_powrotem'),
+                        'data_rozkazu':data_rozkazu,
+                        'nr_rozkazu':nr_rozkazu,
 
                        }
         #tworzenie obiektu bazy danych
         q = Dane.objects.filter(imie=imie, nazwisko=nazwisko)
         if q.exists():  # jeśli obiekt istnieje, zaktualizuj jego dane
-            dana = Dane.objects.get(imie=imie)
+            dana = Dane.objects.get(imie=imie, nazwisko=nazwisko)
             dana.data_wyjazdu = data_wyjazdu
             dana.data_powrotu = data_powrotu
             dana.miasto = miasto
@@ -119,15 +132,12 @@ def panel(request, *args, **kwargs):
 def rozkaz(request):
     queryset = Dane.objects.all()
 
-
-    #queryset = Dane.objects.values_list('stopien', 'imie', 'nazwisko', 'data_wyjazdu', 'data_powrotu', 'miasto') # ogranicz to do wpisów z ostatnich 3 dni
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
     generated_rozkaz = os.path.join(THIS_FOLDER, 'demo.docx')
     document = Document()
     table = document.add_table(rows=0, cols=7)
     lp = 1
 
-    #for stopien, imie, nazwisko, data_wyjazdu, data_przyjazdu, miasto in queryset:
     for i in queryset:
         print(i)
         # formatowanie daty
@@ -186,7 +196,7 @@ def rozkaz(request):
 
 
     #download
-    document.save('./generator/demo.docx')  # sciezki sie tu jebia
+    document.save('./generator/demo.docx')
     response = HttpResponse(open(generated_rozkaz, 'rb').read())
     response['Content-Type'] = 'text/plain'
     response['Content-Disposition'] = 'attachment; filename=rozkaz.docx'

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 
 
 
@@ -10,11 +10,17 @@
 <h1>Informacje</h1>
 
 <p>
-Zwrot kosztów dojazdu to:
+
 <ul>
-    <li>Darmowe pieniądze</li>
-    <li>Prestiż</li>
+    <li>Na biletach musi być wskazane, że są kupione ze zniżką żołnierską 78%, w przeciwnym wypadku zwrot się wam nie należy.</li>
+    <li>Każdej osobie przysługuje 1 zwrot w miesiącu za podróż na PJ oraz dowolna ilość zwrotów za podróż na urlop (jeśli dostaliśmy w miesiącu 2 urlopy i 1 PJ, możemy wnioskować o 3 zwroty, każdy na osobnym wniosku).</li>
+    <li>Można wnioskować o zwrot za podróż do miejscowości NIE DALEJ niż wasza miejscowość zamieszkania oraz przebytą drogą NAJKRÓTSZĄ bądź NAJSZYBSZĄ (nie można jechać do Rzeszowa przez Gdańsk).</li>
+    <li>Zwrot wypłacany jest reguły z opóźnieniem</li>
 </ul>
+W razie pytań zapraszam do kontaktu ze mną. <br>
+<a href="http://isap.sejm.gov.pl/isap.nsf/download.xsp/WDU20061811326/O/D20061326.pdf">Podstawa prawna</a> <br>
+Jak podpisać bilet:
+<img width="100%" src="{% static 'bilet.jpg' %}">
 
 </p>
 
