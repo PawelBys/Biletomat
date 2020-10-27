@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <title>Aplikacja biletowa</title>
 <meta charset="UTF-8">
@@ -54,8 +55,8 @@ tutaj wstaw rzeczy które się zmieniają z każdą stroną
 </div>
 
 <!-- W3.CSS Container   w3-padding-32 -->
-{% load static %}
-<div class="w3-light-grey w3-container " style="margin-top:75px;padding-right:58px"><p class="w3-right">Copyright by Paweł Byś <img width="65px" src="WAT_logo.png"></p> </div>
+
+<div class="w3-light-grey w3-container " style="margin-top:75px;padding-right:58px"><p class="w3-right">Copyright by Paweł Byś <img width="65px" src="{% static  'WAT_logo.png' %}"></p> </div>
 
 <script>
 // Script to open and close sidebar
