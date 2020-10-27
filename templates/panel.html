@@ -4,7 +4,8 @@
 <h1>Witaj w panelu sterowania</h1>
 <!--spróbuj już tutaj posortować-->
 <p>
-    Aktualnie wypełnili formularz:
+    Aktualnie wypełnili formularz:<br>
+PJ:
     <table border="1px">
     <tr>
         <th>Stopień</th>
@@ -16,7 +17,30 @@
     </tr>
     {% for q in lista %}
     <tr>
+        <td> {{ q.stopien }}</td>
+        <td> {{ q.imie }} </td>
+        <td> {{ q.nazwisko.upper }} </td>
+        <td> {{ q.data_wyjazdu }} </td>
+        <td> {{ q.data_powrotu }} </td>
+        <td> {{ q.miasto }} </td>
 
+    </tr>
+    {% endfor %}
+
+</table>
+<br>
+Urlop:
+<table border="1px">
+    <tr>
+        <th>Stopień</th>
+        <th>Imię</th>
+        <th>Nazwisko</th>
+        <th>Data wyjazdu</th>
+        <th>Data powrotu</th>
+        <th>Miasto</th>
+    </tr>
+    {% for q in lista2 %}
+    <tr>
         <td> {{ q.stopien }}</td>
         <td> {{ q.imie }} </td>
         <td> {{ q.nazwisko.upper }} </td>

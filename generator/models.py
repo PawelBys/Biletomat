@@ -7,4 +7,6 @@ class Dane(models.Model):
     stopien = models.CharField(max_length=30)
     imie = models.CharField(max_length=30)
     nazwisko = models.CharField(max_length=30)
+    typ = models.CharField(max_length=30)
+    transport = models.CharField(max_length=30)
 # jak cos tu zmienisz to rob manage.py makemigrations i manage.py migrate

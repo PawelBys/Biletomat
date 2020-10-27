@@ -13,6 +13,8 @@ from docxtpl import DocxTemplate
 from generator.kwotaslownie import kwotaslownie
 
 # ze zmiennej request zbiera się informacje, np kto jest zalogowany
+from .maketable import dodaj_tabele
+
 
 def home_view(request, *args, **kwargs):
 
@@ -56,6 +58,7 @@ def generuj(request):
             stopien = request.POST.get('stopien')
             imie = request.POST.get('imie')
             nazwisko = request.POST.get('nazwisko')
+            typ = request.POST.get('typ')
 
             #liczenie nr rozkazu batalionowego
             wstepna_data = parse_date(request.POST.get('data_wyjazdu'))
@@ -89,17 +92,35 @@ def generuj(request):
 
                        }
         #tworzenie obiektu bazy danych
-        q = Dane.objects.filter(imie=imie, nazwisko=nazwisko)
-        if q.exists():  # jeśli obiekt istnieje, zaktualizuj jego dane
-            dana = Dane.objects.get(imie=imie, nazwisko=nazwisko)
-            dana.data_wyjazdu = data_wyjazdu
-            dana.data_powrotu = data_powrotu
-            dana.miasto = miasto
-            dana.stopien = stopien
-            dana.save()
+        if typ == 'przepustkę jednorazową':
+            q = Dane.objects.filter(imie=imie, nazwisko=nazwisko, typ=typ)
+            if q.exists():  # jeśli obiekt istnieje, zaktualizuj jego dane
+                dana = Dane.objects.get(imie=imie, nazwisko=nazwisko, typ=typ)
+                dana.data_wyjazdu = data_wyjazdu
+                dana.data_powrotu = data_powrotu
+                dana.miasto = miasto
+                dana.stopien = stopien
+                dana.typ = typ
+                dana.transport = srodek
+                dana.save()
+            else:
+                rekord = Dane(data_wyjazdu = data_wyjazdu, data_powrotu=data_powrotu, miasto=miasto, stopien=stopien, imie=imie, nazwisko=nazwisko, typ=typ, transport=srodek)
+                rekord.save()
         else:
-            rekord = Dane(data_wyjazdu = data_wyjazdu, data_powrotu=data_powrotu, miasto=miasto, stopien=stopien, imie=imie, nazwisko=nazwisko)
-            rekord.save()
+            q = Dane.objects.filter(imie=imie, nazwisko=nazwisko, typ=typ, data_wyjazdu=data_wyjazdu, data_powrotu=data_powrotu)
+            if q.exists():  # jeśli obiekt istnieje, zaktualizuj jego dane
+                dana = Dane.objects.get(imie=imie, nazwisko=nazwisko, typ=typ, data_wyjazdu=data_wyjazdu, data_powrotu=data_powrotu)
+                dana.data_wyjazdu = data_wyjazdu
+                dana.data_powrotu = data_powrotu
+                dana.miasto = miasto
+                dana.stopien = stopien
+                dana.typ = typ
+                dana.transport = srodek
+                dana.save()
+            else:
+                rekord = Dane(data_wyjazdu=data_wyjazdu, data_powrotu=data_powrotu, miasto=miasto, stopien=stopien,
+                              imie=imie, nazwisko=nazwisko, typ=typ, transport=srodek)
+                rekord.save()
         doc.render(context)
         doc.save(generated_doc)
 
@@ -122,41 +143,42 @@ def info(request, *args, **kwargs):
     return render(request, "info.html")
 
 def panel(request, *args, **kwargs):
-    queryset = Dane.objects.all()
+    queryset1 = Dane.objects.filter(typ = 'przepustkę jednorazową')
+    queryset2 = Dane.objects.filter(typ = 'urlop')
 
     context = {
-        "lista": queryset,
+        "lista": queryset1,
+        "lista2":queryset2
     }
     return render(request, "panel.html", context)
 
 def rozkaz(request):
-    queryset = Dane.objects.all()
+
+
+    query1 = Dane.objects.filter(typ = 'przepustkę jednorazową', transport = 'kolejowym w klasie 2, w pociągu ')
+    query2 = Dane.objects.filter(typ = 'urlop', transport = 'kolejowym w klasie 2, w pociągu ')
+    query3 = Dane.objects.filter(typ = 'przepustkę jednorazową', transport = 'autobusowym w komunikacji ')
+    query4 = Dane.objects.filter(typ = 'urlop', transport = 'autobusowym w komunikacji ')
+
 
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
     generated_rozkaz = os.path.join(THIS_FOLDER, 'demo.docx')
     document = Document()
-    table = document.add_table(rows=0, cols=7)
-    lp = 1
 
-    for i in queryset:
-        print(i)
-        # formatowanie daty
-        data = 'w dn. '
-        if str(i.data_powrotu)[5:7] == str(i.data_wyjazdu)[5:7]:
-            data += str(i.data_wyjazdu)[8:10] + ' - '
-        else:
-            data += str(i.data_wyjazdu)[8:10] + '.' + str(i.data_wyjazdu)[5:7] + ' - '
-        data += str(i.data_powrotu)[8:10] + '.' + str(i.data_wyjazdu)[5:7] + '.' + str(i.data_wyjazdu)[0:4] + ' r.'
-        # wpisywanie danych do tabeli
-        komorki = table.add_row().cells
-        komorki[0].text = str(lp) + ')'
-        komorki[1].text = i.stopien
-        komorki[2].text = i.imie
-        komorki[3].text = str(i.nazwisko).upper()
-        komorki[4].text = data
-        komorki[5].text = 'do m.'
-        komorki[6].text = i.miasto
-        lp += 1
+    #tworzenie tabeli osobna funkcja
+    document.add_paragraph('Na PJ, pociągiem')
+    table1 = dodaj_tabele(document, query1)
+
+    document.add_paragraph('Na urlop, pociągiem')
+    table2 = dodaj_tabele(document, query2)
+
+    document.add_paragraph('Na PJ, autobusem')
+    table3 = dodaj_tabele(document, query3)
+
+    document.add_paragraph('Na urlop, autobusem')
+    table4 = dodaj_tabele(document, query4)
+
+    tables = [table1, table2, table3, table4]
     #ustawianie parametrów dokumentu
     style = document.styles['Normal']
     font = style.font
@@ -164,25 +186,26 @@ def rozkaz(request):
     font.size = Pt(12)
 
     i=1
-    for row in table.rows:
-        j=1
-        for cell in row.cells:
-            if j == 1: # 1)
-                cell.width = Inches(0.1)
-            if j == 2: # stopien
-                cell.width = Inches(1.2)
-            if j == 3: # imie
-                cell.width = Inches(1)
-            if j == 4: # nazwisko
-                cell.width = Inches(1.2)
-            if j == 5:
-                cell.width = Inches(2.5)
-            if j == 6:
-                cell.width = Inches(0.8)
-            if j == 7:
-                cell.width = Inches(1.2)
-            j+=1
-        i+=1
+    for tbl in tables:
+        for row in tbl.rows:
+            j=1
+            for cell in row.cells:
+                if j == 1: # 1)
+                    cell.width = Inches(0.1)
+                if j == 2: # stopien
+                    cell.width = Inches(1.2)
+                if j == 3: # imie
+                    cell.width = Inches(1)
+                if j == 4: # nazwisko
+                    cell.width = Inches(1.2)
+                if j == 5:
+                    cell.width = Inches(2.5)
+                if j == 6:
+                    cell.width = Inches(0.8)
+                if j == 7:
+                    cell.width = Inches(1.2)
+                j+=1
+            i+=1
 
     margin = 1
     sections = document.sections
