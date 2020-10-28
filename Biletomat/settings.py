@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'generator',
+    "bootstrap4",
 
 ]
 
@@ -130,3 +131,6 @@ STATICFILES_DIRS = (
 MEDIA_URL = '/templates/'
 
 STATIC_ROOT = '/static/'
+
+DATE_FORMAT = 'd-m-Y'
+#USE_L10N = False

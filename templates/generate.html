@@ -1,26 +1,36 @@
 {% extends 'base.html' %}
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-  <title>Simple is Better Than Complex</title>
-  <style>
-    .czekbox {
-      width: 5px;
-    }
-  </style>
-  </head>
-  <body>
-    <div class="testbox">
+{% load bootstrap4 %}
+{% block extrahead %}
+{{ form.media }}
+{% endblock %}
 
 {% block content %}
+
+<head>
+
+  <style>
+
+    .normal {
+    width: 300px;
+    }
+    .data {
+    width: 300px;
+    }
+  </style>
+
+</head>
+
+
+  <body>
 
 {% load widget_tweaks %}
 
 
 <form method="post" novalidate>
   {% csrf_token %}
+
+<!--  {% bootstrap_form form %}-->
 
   {{ form.non_field_errors }}
 
@@ -35,7 +45,7 @@
         <th style="text-align:right">{{ field.label_tag }}</th>
         <td style="padding:5px">
 
-          {% render_field field style="width:300px"  %}
+          {% render_field field  %}
           <span style="color:red;">{{ field.errors }}</span>
 
           <br>
@@ -52,9 +62,13 @@
 
 
 
+
+
+
+
 {% endblock %}
 
-    </div>
+
   </body>
 
 

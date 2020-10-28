@@ -63,6 +63,7 @@ def generuj(request):
 
             #liczenie nr rozkazu batalionowego
             wstepna_data = parse_date(request.POST.get('data_wyjazdu'))
+            #wstepna_data = parse_date(date(data_wyjazdu.year))
             data_rozkazu = '.............'
             nr_rozkazu = '.............'
             if wstepna_data.weekday() == 5 or wstepna_data.weekday() == 4:

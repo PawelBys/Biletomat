@@ -1,8 +1,13 @@
 from datetime import date, timedelta
 
+
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import DateInput
+
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
 
 
 class BiletForm(forms.Form):
@@ -30,19 +35,21 @@ class BiletForm(forms.Form):
         return cleaned_data
 
 
-    typ = forms.CharField(widget=forms.Select(choices=TYP))
-    imie = forms.CharField(max_length=50, label="Imię")
-    nazwisko = forms.CharField(max_length=50, label="Nazwisko")
-    stopien = forms.CharField(widget=forms.Select(choices=STOPNIE), label="Stopień")
-    adres = forms.CharField(max_length=100, initial='', help_text="WZÓR: ul. Kolejowa 7/23, 01-476 Warszawa")
-    pluton = forms.CharField(widget=forms.Select(choices=PLUTONY))
-    data_wyjazdu = forms.DateField(widget=DateInput(), initial=date.today(), help_text="Data z blankietu (np. sobota, nie piątek)")
-    data_powrotu = forms.DateField( widget=DateInput(), initial=date.today())
-    tam_z_powrotem = forms.CharField(widget=forms.Select(choices=TAM), required=False, label="Tam/Tam i z powrotem", help_text="Czy składasz wniosek z biletem w jedną, czy w obie strony?")
-    miasto = forms.CharField(max_length=30, label="Miasto (z biletu)")
-    miesiac = forms.CharField(widget=forms.Select(choices=MIESIACE), label="Miesiąc", help_text="Miesiąc za jaki chcesz otrzymać należność")
+    typ = forms.CharField(widget=forms.Select(choices=TYP, attrs={'class':'normal'}))
+    imie = forms.CharField(max_length=50, label="Imię", widget=forms.TextInput(attrs={'class':'normal'})  )
+    nazwisko = forms.CharField(max_length=50, label="Nazwisko", widget=forms.TextInput(attrs={'class':'normal'}))
+    stopien = forms.CharField(widget=forms.Select(choices=STOPNIE, attrs={'class':'normal'}), label="Stopień")
+    adres = forms.CharField(max_length=100, initial='', help_text="WZÓR: ul. Kolejowa 7/23, 01-476 Warszawa", widget=forms.TextInput(attrs={'class':'normal'}))
+    pluton = forms.CharField(widget=forms.Select(choices=PLUTONY, attrs={'class':'normal'}))
+    #data_wyjazdu = forms.DateField(widget=DateInput(attrs={'class':'data'}), initial=date.today(), help_text="Data z blankietu (np. sobota, nie piątek)")
+    #data_powrotu = forms.DateField( widget=DateInput(attrs={'class':'data'}), initial=date.today())
+    data_wyjazdu = forms.DateField(widget=DateInput, initial=date.today())
+    data_powrotu = forms.DateField(widget=DateInput, initial=date.today())
+    tam_z_powrotem = forms.CharField(widget=forms.Select(choices=TAM, attrs={'class':'normal'}), required=False, label="Tam/Tam i z powrotem", help_text="Czy składasz wniosek z biletem w jedną, czy w obie strony?")
+    miasto = forms.CharField(max_length=30, label="Miasto (z biletu)", widget=forms.TextInput(attrs={'class':'normal'}))
+    miesiac = forms.CharField(widget=forms.Select(choices=MIESIACE, attrs={'class':'normal'}), label="Miesiąc", help_text="Miesiąc za jaki chcesz otrzymać należność")
     typ_pociagu = forms.MultipleChoiceField(choices=POCIAGI, widget=forms.CheckboxSelectMultiple(attrs={'class':'czekbox'}), required=False, label="Typ pociągu")
     typ_autobusu = forms.MultipleChoiceField(choices=AUTOBUSY, widget=forms.CheckboxSelectMultiple(attrs={'class':'czekbox'}), required=False)
-    kwota = forms.DecimalField(decimal_places=2, max_digits=10, label="Suma kwot z biletów", required=True)
+    kwota = forms.DecimalField(decimal_places=2, max_digits=10, label="Suma kwot z biletów", required=True, widget=forms.NumberInput(attrs={'class':'normal'}))
 
 
