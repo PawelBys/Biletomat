@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.accordion {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: 0.4s;
+}
+
+.active, .accordion:hover {
+  background-color: #ccc;
+}
+
+.panel {
+  padding: 0 18px;
+  background-color: white;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+</style>
+</head>
+<body>
+
+<button class="accordion">1. Czy otrzymam zwrot kosztów dojazdu, jeśli skorzystałem z innej ulgi?</button>
+<div class="panel">
+  <p>Na biletach musi być wskazane, że są kupione ze zniżką żołnierską 78%, w przeciwnym wypadku zwrot się nie należy.</p>
+</div>
+
+<button class="accordion">2. Ile wniosków o zwrot kosztów dojazdu mogę złożyć na raz? </button>
+<div class="panel">
+    <p>Każdej osobie przysługuje 1 zwrot w miesiącu za podróż na PJ oraz dowolna ilość zwrotów za podróż na urlop.
+Przykład: Jeśli dostaliśmy w miesiącu 2 urlopy i 1 PJ, możemy wnioskować o 3 zwroty, każdy na osobnym wniosku.
+</p>
+</div>
+
+<button class="accordion">3. W jakim przypadku przysługuje mi przejazd na koszt wojska? </button>
+<div class="panel">
+  <p>Można wnioskować o zwrot za podróż do miejscowości NIE DALEJ niż twoja miejscowość zamieszkania oraz przebytą drogą NAJKRÓTSZĄ bądź NAJSZYBSZĄ.
+Przykład: Nie można jechać do Rzeszowa przez Gdańsk.
+  </p>
+</div>
+
+<button class="accordion">4. W jakim przypadku nie przysługuje mi przejazd na koszt wojska? </button>
+<div class="panel">
+    <p>
+        <ul>
+    <li>W przypadku przejazdu w granicach miejscowości, w której pełnisz służbę. </li>
+    <li>Jeśli odbywasz podróż 1 klasą.</li>
+</ul>
+    </p>
+</div>
+
+<button class="accordion">5. Kiedy otrzymam zwrot kosztów dojazdu? </button>
+<div class="panel">
+    <p>Około 14 dni od daty złożenia wniosku. Zwrot wypłacany jest reguły z opóźnieniem. </p>
+</div>
+
+<button class="accordion">6. Co jeśli źle uzupełniłem dane w formularzu? </button>
+<div class="panel">
+  <p>
+      Jeśli pomylisz się w:
+      <ul>
+    <li>imieniu, nazwisku, miesiącu   </li>
+    <ul><li>poinformuj mnie o tym, bym mógł wprowadzić stosowną korektę</li></ul>
+    <li>danych PJ</li>
+    <ul><li>wypełnij jeszcze raz (poprawnie) formularz podając to samo imię i nazwisko (dane zostaną nadpisane)</li></ul>
+    <li>danych urlopu</li>
+    <ul><li>jeśli są to inne dane niż daty, wypełnij jeszcze raz (poprawnie) formularz podając to samo imię, nazwisko oraz daty (dane zostaną nadpisane)</li></ul>
+    <li>datach urlopu</li>
+    <ul><li>poinformuj mnie o tym, bym mógł wprowadzić stosowną korektę</li></ul>
+</ul>
+  </p>
+</div>
+
+<script>
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.maxHeight) {
+      panel.style.maxHeight = null;
+    } else {
+      panel.style.maxHeight = panel.scrollHeight + "px";
+    }
+  });
+}
+</script>
+
+</body>
+</html>
