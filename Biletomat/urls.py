@@ -26,4 +26,5 @@ urlpatterns = [
     path('generuj/', generuj, name='generuj'),
     path('info/', info, name='info'),
     path('rozkaz/', rozkaz, name='rozkaz'),
+    path('no_permission/', panel, name='panel'),
 ]

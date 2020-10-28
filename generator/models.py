@@ -9,4 +9,5 @@ class Dane(models.Model):
     nazwisko = models.CharField(max_length=30)
     typ = models.CharField(max_length=30)
     transport = models.CharField(max_length=30)
+    miesiac = models.CharField(max_length=30, default='---')
 # jak cos tu zmienisz to rob manage.py makemigrations i manage.py migrate

@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.utils.dateparse import parse_date
 from docx import Document
 from docx.shared import Inches, Cm, Pt
-from docx.text import font
+
 
 from generator.models import Dane
 from .forms import BiletForm
@@ -59,17 +59,21 @@ def generuj(request):
             imie = request.POST.get('imie')
             nazwisko = request.POST.get('nazwisko')
             typ = request.POST.get('typ')
+            miesiac = request.POST.get('miesiac')
 
             #liczenie nr rozkazu batalionowego
             wstepna_data = parse_date(request.POST.get('data_wyjazdu'))
-            if wstepna_data.weekday() == 5:
-                data_rozkazu = wstepna_data-timedelta(days=2)
-            else:
-                data_rozkazu = wstepna_data - timedelta(days=1)
+            data_rozkazu = '.............'
+            nr_rozkazu = '.............'
+            if wstepna_data.weekday() == 5 or wstepna_data.weekday() == 4:
+                if wstepna_data.weekday() == 5:
+                    data_rozkazu = wstepna_data-timedelta(days=2)
+                else:
+                    data_rozkazu = wstepna_data - timedelta(days=1)
 
-            # dnia 24.09.2020 był nr rozkazu 76
-            # odejmij datę wyjazdu od 24.09, uzyskane dni pocziel na 7 i pomnóż razy 2 - spodziewana liczba wydanych rozkazow
-            nr_rozkazu = int(76 + (((data_rozkazu-date(2020, 9, 24)).days+1)/7)*2)
+                # dnia 24.09.2020 był nr rozkazu 76
+                # odejmij datę wyjazdu od 24.09, uzyskane dni pocziel na 7 i pomnóż razy 2 - spodziewana liczba wydanych rozkazow
+                nr_rozkazu = int(76 + (((data_rozkazu-date(2020, 9, 24)).days+1)/7)*2)
 
         context = {'stopien': request.POST.get('stopien'),
                        'imie':request.POST.get('imie'),
@@ -93,18 +97,19 @@ def generuj(request):
                        }
         #tworzenie obiektu bazy danych
         if typ == 'przepustkę jednorazową':
-            q = Dane.objects.filter(imie=imie, nazwisko=nazwisko, typ=typ)
+            q = Dane.objects.filter(imie=imie, nazwisko=nazwisko, typ=typ, miesiac=miesiac)
             if q.exists():  # jeśli obiekt istnieje, zaktualizuj jego dane
-                dana = Dane.objects.get(imie=imie, nazwisko=nazwisko, typ=typ)
+                dana = Dane.objects.get(imie=imie, nazwisko=nazwisko, typ=typ, miesiac=miesiac)
                 dana.data_wyjazdu = data_wyjazdu
                 dana.data_powrotu = data_powrotu
                 dana.miasto = miasto
                 dana.stopien = stopien
                 dana.typ = typ
                 dana.transport = srodek
+                dana.miesiac=miesiac
                 dana.save()
             else:
-                rekord = Dane(data_wyjazdu = data_wyjazdu, data_powrotu=data_powrotu, miasto=miasto, stopien=stopien, imie=imie, nazwisko=nazwisko, typ=typ, transport=srodek)
+                rekord = Dane(data_wyjazdu = data_wyjazdu, data_powrotu=data_powrotu, miasto=miasto, stopien=stopien, imie=imie, nazwisko=nazwisko, typ=typ, transport=srodek, miesiac=miesiac)
                 rekord.save()
         else:
             q = Dane.objects.filter(imie=imie, nazwisko=nazwisko, typ=typ, data_wyjazdu=data_wyjazdu, data_powrotu=data_powrotu)
@@ -150,7 +155,10 @@ def panel(request, *args, **kwargs):
         "lista": queryset1,
         "lista2":queryset2
     }
-    return render(request, "panel.html", context)
+    if request.user.is_authenticated:
+        return render(request, "panel.html", context)
+    else:
+        return render(request, "no_permission.html")
 
 def rozkaz(request):
 
@@ -223,4 +231,7 @@ def rozkaz(request):
     response = HttpResponse(open(generated_rozkaz, 'rb').read())
     response['Content-Type'] = 'text/plain'
     response['Content-Disposition'] = 'attachment; filename=rozkaz.docx'
-    return response
+    if request.user.is_authenticated:
+        return response
+    else:
+        return render(request, "no_permission.html")
