@@ -128,3 +128,5 @@ STATICFILES_DIRS = (
 )
 
 MEDIA_URL = '/templates/'
+
+STATIC_ROOT = '/static/'
