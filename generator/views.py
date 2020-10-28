@@ -75,68 +75,66 @@ def generuj(request):
                 # odejmij datę wyjazdu od 24.09, uzyskane dni pocziel na 7 i pomnóż razy 2 - spodziewana liczba wydanych rozkazow
                 nr_rozkazu = int(76 + (((data_rozkazu-date(2020, 9, 24)).days+1)/7)*2)
 
-        context = {'stopien': request.POST.get('stopien'),
-                       'imie':request.POST.get('imie'),
-                       'nazwisko':request.POST.get('nazwisko'),
-                       'adres':request.POST.get('adres'),
-                       'pluton':request.POST.get('pluton'),
-                        'data_przed': parse_date(request.POST.get('data_wyjazdu'))-timedelta(days=1),
-                       'data_wyjazdu':request.POST.get('data_wyjazdu'),
-                        'data_powrotu':request.POST.get('data_powrotu'),
-                        'miesiac':request.POST.get('miesiac'),
-                        'miejscowosc':request.POST.get('miasto'),
-                        'kwota':kwota,
-                        'kwota_slownie':kwotaslownie(kwota, 1),
-                        'typ': request.POST.get('typ'),
-                       'typ_srodka': typ_srodka,
-                       'srodek': srodek,
-                        'powrot':request.POST.get('tam_z_powrotem'),
-                        'data_rozkazu':data_rozkazu,
-                        'nr_rozkazu':nr_rozkazu,
+            context = {'stopien': request.POST.get('stopien'),
+                           'imie':request.POST.get('imie'),
+                           'nazwisko':request.POST.get('nazwisko'),
+                           'adres':request.POST.get('adres'),
+                           'pluton':request.POST.get('pluton'),
+                            'data_przed': parse_date(request.POST.get('data_wyjazdu'))-timedelta(days=1),
+                           'data_wyjazdu':request.POST.get('data_wyjazdu'),
+                            'data_powrotu':request.POST.get('data_powrotu'),
+                            'miesiac':request.POST.get('miesiac'),
+                            'miejscowosc':request.POST.get('miasto'),
+                            'kwota':kwota,
+                            'kwota_slownie':kwotaslownie(kwota, 1),
+                            'typ': request.POST.get('typ'),
+                           'typ_srodka': typ_srodka,
+                           'srodek': srodek,
+                            'powrot':request.POST.get('tam_z_powrotem'),
+                            'data_rozkazu':data_rozkazu,
+                            'nr_rozkazu':nr_rozkazu,
 
-                       }
-        #tworzenie obiektu bazy danych
-        if typ == 'przepustkę jednorazową':
-            q = Dane.objects.filter(imie=imie, nazwisko=nazwisko, typ=typ, miesiac=miesiac)
-            if q.exists():  # jeśli obiekt istnieje, zaktualizuj jego dane
-                dana = Dane.objects.get(imie=imie, nazwisko=nazwisko, typ=typ, miesiac=miesiac)
-                dana.data_wyjazdu = data_wyjazdu
-                dana.data_powrotu = data_powrotu
-                dana.miasto = miasto
-                dana.stopien = stopien
-                dana.typ = typ
-                dana.transport = srodek
-                dana.miesiac=miesiac
-                dana.save()
+                           }
+            #tworzenie obiektu bazy danych
+            if typ == 'przepustkę jednorazową':
+                q = Dane.objects.filter(imie=imie, nazwisko=nazwisko, typ=typ, miesiac=miesiac)
+                if q.exists():  # jeśli obiekt istnieje, zaktualizuj jego dane
+                    dana = Dane.objects.get(imie=imie, nazwisko=nazwisko, typ=typ, miesiac=miesiac)
+                    dana.data_wyjazdu = data_wyjazdu
+                    dana.data_powrotu = data_powrotu
+                    dana.miasto = miasto
+                    dana.stopien = stopien
+                    dana.typ = typ
+                    dana.transport = srodek
+                    dana.miesiac=miesiac
+                    dana.save()
+                else:
+                    rekord = Dane(data_wyjazdu = data_wyjazdu, data_powrotu=data_powrotu, miasto=miasto, stopien=stopien, imie=imie, nazwisko=nazwisko, typ=typ, transport=srodek, miesiac=miesiac)
+                    rekord.save()
             else:
-                rekord = Dane(data_wyjazdu = data_wyjazdu, data_powrotu=data_powrotu, miasto=miasto, stopien=stopien, imie=imie, nazwisko=nazwisko, typ=typ, transport=srodek, miesiac=miesiac)
-                rekord.save()
-        else:
-            q = Dane.objects.filter(imie=imie, nazwisko=nazwisko, typ=typ, data_wyjazdu=data_wyjazdu, data_powrotu=data_powrotu)
-            if q.exists():  # jeśli obiekt istnieje, zaktualizuj jego dane
-                dana = Dane.objects.get(imie=imie, nazwisko=nazwisko, typ=typ, data_wyjazdu=data_wyjazdu, data_powrotu=data_powrotu)
-                dana.data_wyjazdu = data_wyjazdu
-                dana.data_powrotu = data_powrotu
-                dana.miasto = miasto
-                dana.stopien = stopien
-                dana.typ = typ
-                dana.transport = srodek
-                dana.save()
-            else:
-                rekord = Dane(data_wyjazdu=data_wyjazdu, data_powrotu=data_powrotu, miasto=miasto, stopien=stopien,
-                              imie=imie, nazwisko=nazwisko, typ=typ, transport=srodek)
-                rekord.save()
-        doc.render(context)
-        doc.save(generated_doc)
+                q = Dane.objects.filter(imie=imie, nazwisko=nazwisko, typ=typ, data_wyjazdu=data_wyjazdu, data_powrotu=data_powrotu)
+                if q.exists():  # jeśli obiekt istnieje, zaktualizuj jego dane
+                    dana = Dane.objects.get(imie=imie, nazwisko=nazwisko, typ=typ, data_wyjazdu=data_wyjazdu, data_powrotu=data_powrotu)
+                    dana.data_wyjazdu = data_wyjazdu
+                    dana.data_powrotu = data_powrotu
+                    dana.miasto = miasto
+                    dana.stopien = stopien
+                    dana.typ = typ
+                    dana.transport = srodek
+                    dana.save()
+                else:
+                    rekord = Dane(data_wyjazdu=data_wyjazdu, data_powrotu=data_powrotu, miasto=miasto, stopien=stopien,
+                                  imie=imie, nazwisko=nazwisko, typ=typ, transport=srodek)
+                    rekord.save()
+            doc.render(context)
+            doc.save(generated_doc)
 
-        # download
-        response = HttpResponse(open(generated_doc, 'rb').read())
-        response['Content-Type'] = 'text/plain'
-        response['Content-Disposition'] = 'attachment; filename=pobrane.docx'
+            # download
+            response = HttpResponse(open(generated_doc, 'rb').read())
+            response['Content-Type'] = 'text/plain'
+            response['Content-Disposition'] = 'attachment; filename=pobrane.docx'
+            return response
 
-
-
-        return response
 
     context = {
         "form": form

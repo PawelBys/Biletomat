@@ -36,7 +36,8 @@
         <td style="padding:5px">
 
           {% render_field field style="width:300px"  %}
-          {{ field.errors }}
+          <span style="color:red;">{{ field.errors }}</span>
+
           <br>
           {{ field.help_text }}
         </td>

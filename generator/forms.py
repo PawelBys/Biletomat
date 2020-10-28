@@ -43,6 +43,6 @@ class BiletForm(forms.Form):
     miesiac = forms.CharField(widget=forms.Select(choices=MIESIACE), label="Miesiąc", help_text="Miesiąc za jaki chcesz otrzymać należność")
     typ_pociagu = forms.MultipleChoiceField(choices=POCIAGI, widget=forms.CheckboxSelectMultiple(attrs={'class':'czekbox'}), required=False, label="Typ pociągu")
     typ_autobusu = forms.MultipleChoiceField(choices=AUTOBUSY, widget=forms.CheckboxSelectMultiple(attrs={'class':'czekbox'}), required=False)
-    kwota = forms.DecimalField(decimal_places=2, max_digits=10, label="Suma kwot z biletów")
+    kwota = forms.DecimalField(decimal_places=2, max_digits=10, label="Suma kwot z biletów", required=True)
 
 
