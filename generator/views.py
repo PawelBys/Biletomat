@@ -14,6 +14,7 @@ from generator.kwotaslownie import kwotaslownie
 
 # ze zmiennej request zbiera się informacje, np kto jest zalogowany
 from .maketable import dodaj_tabele
+from .maketable import switch_stopien
 
 
 def home_view(request, *args, **kwargs):
@@ -61,6 +62,9 @@ def generuj(request):
             typ = request.POST.get('typ')
             miesiac = request.POST.get('miesiac')
 
+            #przypisanie id stopnia do stopnia
+            wyliczony_stopien = switch_stopien(stopien)
+            print(wyliczony_stopien)
             #liczenie nr rozkazu batalionowego
             wstepna_data = parse_date(request.POST.get('data_wyjazdu'))
             #wstepna_data = parse_date(date(data_wyjazdu.year))
@@ -96,6 +100,7 @@ def generuj(request):
                             'nr_rozkazu':nr_rozkazu,
 
                            }
+            nazwisko=nazwisko.upper()
             #tworzenie obiektu bazy danych
             if typ == 'przepustkę jednorazową':
                 q = Dane.objects.filter(imie=imie, nazwisko=nazwisko, typ=typ, miesiac=miesiac)
@@ -108,9 +113,10 @@ def generuj(request):
                     dana.typ = typ
                     dana.transport = srodek
                     dana.miesiac=miesiac
+                    dana.stopien_id = wyliczony_stopien
                     dana.save()
                 else:
-                    rekord = Dane(data_wyjazdu = data_wyjazdu, data_powrotu=data_powrotu, miasto=miasto, stopien=stopien, imie=imie, nazwisko=nazwisko, typ=typ, transport=srodek, miesiac=miesiac)
+                    rekord = Dane(data_wyjazdu = data_wyjazdu, data_powrotu=data_powrotu, miasto=miasto, stopien=stopien, imie=imie, nazwisko=nazwisko, typ=typ, transport=srodek, miesiac=miesiac, stopien_id = wyliczony_stopien)
                     rekord.save()
             else:
                 q = Dane.objects.filter(imie=imie, nazwisko=nazwisko, typ=typ, data_wyjazdu=data_wyjazdu, data_powrotu=data_powrotu)
@@ -122,10 +128,11 @@ def generuj(request):
                     dana.stopien = stopien
                     dana.typ = typ
                     dana.transport = srodek
+                    dana.stopien_id = wyliczony_stopien
                     dana.save()
                 else:
                     rekord = Dane(data_wyjazdu=data_wyjazdu, data_powrotu=data_powrotu, miasto=miasto, stopien=stopien,
-                                  imie=imie, nazwisko=nazwisko, typ=typ, transport=srodek)
+                                  imie=imie, nazwisko=nazwisko, typ=typ, transport=srodek, stopien_id = wyliczony_stopien)
                     rekord.save()
             doc.render(context)
             doc.save(generated_doc)
@@ -147,8 +154,9 @@ def info(request, *args, **kwargs):
     return render(request, "info.html")
 
 def panel(request, *args, **kwargs):
-    queryset1 = Dane.objects.filter(typ = 'przepustkę jednorazową')
-    queryset2 = Dane.objects.filter(typ = 'urlop')
+    queryset1 = Dane.objects.filter(typ = 'przepustkę jednorazową').order_by('-stopien_id', 'nazwisko')
+    ordered_queryset1 = queryset1
+    queryset2 = Dane.objects.filter(typ = 'urlop').order_by('-stopien_id', 'nazwisko')
 
     context = {
         "lista": queryset1,
@@ -162,10 +170,10 @@ def panel(request, *args, **kwargs):
 def rozkaz(request):
 
 
-    query1 = Dane.objects.filter(typ = 'przepustkę jednorazową', transport = 'kolejowym w klasie 2, w pociągu ')
-    query2 = Dane.objects.filter(typ = 'urlop', transport = 'kolejowym w klasie 2, w pociągu ')
-    query3 = Dane.objects.filter(typ = 'przepustkę jednorazową', transport = 'autobusowym w komunikacji ')
-    query4 = Dane.objects.filter(typ = 'urlop', transport = 'autobusowym w komunikacji ')
+    query1 = Dane.objects.filter(typ = 'przepustkę jednorazową', transport = 'kolejowym w klasie 2, w pociągu ').order_by('-stopien_id', 'nazwisko')
+    query2 = Dane.objects.filter(typ = 'urlop', transport = 'kolejowym w klasie 2, w pociągu ').order_by('-stopien_id', 'nazwisko')
+    query3 = Dane.objects.filter(typ = 'przepustkę jednorazową', transport = 'autobusowym w komunikacji ').order_by('-stopien_id', 'nazwisko')
+    query4 = Dane.objects.filter(typ = 'urlop', transport = 'autobusowym w komunikacji ').order_by('-stopien_id', 'nazwisko')
 
 
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))

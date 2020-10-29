@@ -24,3 +24,14 @@ def dodaj_tabele(document, queryset):
         komorki[6].text = i.miasto
         lp += 1
     return table
+
+def switch_stopien(x):
+    switcher = {
+        'szer. pchor.' : '0',
+        'st. szer. pchor.' : '1',
+        'kpr. pchor.' : '2',
+        'st. kpr. pchor.' : '3',
+        'plut. pchor.' : '4',
+        'sierż. pchor.' : '5'
+    }
+    return switcher.get(x, '9')

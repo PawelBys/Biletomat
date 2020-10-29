@@ -10,4 +10,5 @@ class Dane(models.Model):
     typ = models.CharField(max_length=30)
     transport = models.CharField(max_length=30)
     miesiac = models.CharField(max_length=30, default='---')
+    stopien_id = models.CharField(max_length=10)
 # jak cos tu zmienisz to rob manage.py makemigrations i manage.py migrate
