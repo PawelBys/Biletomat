@@ -1,6 +1,6 @@
 import os
 from datetime import timedelta, date
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.utils.dateparse import parse_date
 from docx import Document
@@ -153,6 +153,13 @@ def info(request, *args, **kwargs):
 
     return render(request, "info.html")
 
+def record_delete(request, id):
+    object = Dane.objects.filter(id=id)
+    if request.method =='POST':
+        object.delete()
+
+        return redirect('/panel')
+
 def panel(request, *args, **kwargs):
     queryset1 = Dane.objects.filter(typ = 'przepustkę jednorazową').order_by('-stopien_id', 'nazwisko')
     ordered_queryset1 = queryset1
@@ -166,6 +173,7 @@ def panel(request, *args, **kwargs):
         return render(request, "panel.html", context)
     else:
         return render(request, "no_permission.html")
+
 
 def rozkaz(request):
 

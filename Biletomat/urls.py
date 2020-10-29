@@ -13,11 +13,15 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls import url
 from django.contrib import admin
 from django.urls import include, path
 
-from generator.views import home_view, panel, generuj, info, rozkaz
+from generator.views import home_view, panel, generuj, info, rozkaz, record_delete
 # tutaj dodaje się kolejne "widoki" - podstrony, trzeba je mieć w pliku views jako funkcję
+
+app_name = 'generator'
+
 urlpatterns = [
     path('home/', home_view, name='home_view'),
     path('', home_view, name='home_view'),
@@ -27,4 +31,5 @@ urlpatterns = [
     path('info/', info, name='info'),
     path('rozkaz/', rozkaz, name='rozkaz'),
     path('no_permission/', panel, name='panel'),
+    url(r'^delete/(?P<id>[0-9]+)/$', record_delete , name='record_delete')
 ]

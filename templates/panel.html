@@ -3,7 +3,7 @@
 {% block content %}
 
 <h1>Witaj w panelu sterowania</h1>
-<!--spróbuj już tutaj posortować-->
+
 <p>
     Aktualnie wypełnili formularz:<br>
 PJ:
@@ -16,6 +16,7 @@ PJ:
         <th>Data wyjazdu</th>
         <th>Data powrotu</th>
         <th>Miasto</th>
+        <th>Usuń</th>
     </tr>
     {% for q in lista %}
     <tr>
@@ -26,6 +27,14 @@ PJ:
         <td> {{ q.data_wyjazdu }} </td>
         <td> {{ q.data_powrotu }} </td>
         <td> {{ q.miasto }} </td>
+        <td>
+            <form action="{% url 'record_delete' q.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Usuń">
+            </form>
+
+        </td>
+
 
     </tr>
     {% endfor %}
@@ -42,6 +51,7 @@ Urlop:
         <th>Data wyjazdu</th>
         <th>Data powrotu</th>
         <th>Miasto</th>
+        <th>Usuń</th>
     </tr>
     {% for q in lista2 %}
     <tr>
@@ -52,6 +62,13 @@ Urlop:
         <td> {{ q.data_wyjazdu }} </td>
         <td> {{ q.data_powrotu }} </td>
         <td> {{ q.miasto }} </td>
+        <td>
+            <form action="{% url 'record_delete' q.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Usuń">
+            </form>
+
+        </td>
 
     </tr>
     {% endfor %}

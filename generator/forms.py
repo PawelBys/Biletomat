@@ -43,7 +43,7 @@ class BiletForm(forms.Form):
     pluton = forms.CharField(widget=forms.Select(choices=PLUTONY, attrs={'class':'normal'}))
     #data_wyjazdu = forms.DateField(widget=DateInput(attrs={'class':'data'}), initial=date.today(), help_text="Data z blankietu (np. sobota, nie piątek)")
     #data_powrotu = forms.DateField( widget=DateInput(attrs={'class':'data'}), initial=date.today())
-    data_wyjazdu = forms.DateField(widget=DateInput, initial=date.today())
+    data_wyjazdu = forms.DateField(widget=DateInput, initial=date.today(), help_text="Data z blankietu, nie fizycznego wyjazdu (np. sobota, nie piątek)" )
     data_powrotu = forms.DateField(widget=DateInput, initial=date.today())
     tam_z_powrotem = forms.CharField(widget=forms.Select(choices=TAM, attrs={'class':'normal'}), required=False, label="Tam/Tam i z powrotem", help_text="Czy składasz wniosek z biletem w jedną, czy w obie strony?")
     miasto = forms.CharField(max_length=30, label="Miasto (z biletu)", widget=forms.TextInput(attrs={'class':'normal'}))
