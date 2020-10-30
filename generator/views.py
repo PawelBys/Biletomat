@@ -114,9 +114,10 @@ def generuj(request):
                     dana.transport = srodek
                     dana.miesiac=miesiac
                     dana.stopien_id = wyliczony_stopien
+                    dana.nr_rozkazu = nr_rozkazu
                     dana.save()
                 else:
-                    rekord = Dane(data_wyjazdu = data_wyjazdu, data_powrotu=data_powrotu, miasto=miasto, stopien=stopien, imie=imie, nazwisko=nazwisko, typ=typ, transport=srodek, miesiac=miesiac, stopien_id = wyliczony_stopien)
+                    rekord = Dane(data_wyjazdu = data_wyjazdu, data_powrotu=data_powrotu, miasto=miasto, stopien=stopien, imie=imie, nazwisko=nazwisko, typ=typ, transport=srodek, miesiac=miesiac, stopien_id = wyliczony_stopien, nr_rozkazu = nr_rozkazu)
                     rekord.save()
             else:
                 q = Dane.objects.filter(imie=imie, nazwisko=nazwisko, typ=typ, data_wyjazdu=data_wyjazdu, data_powrotu=data_powrotu)
@@ -129,10 +130,11 @@ def generuj(request):
                     dana.typ = typ
                     dana.transport = srodek
                     dana.stopien_id = wyliczony_stopien
+                    dana.nr_rozkazu = nr_rozkazu
                     dana.save()
                 else:
                     rekord = Dane(data_wyjazdu=data_wyjazdu, data_powrotu=data_powrotu, miasto=miasto, stopien=stopien,
-                                  imie=imie, nazwisko=nazwisko, typ=typ, transport=srodek, stopien_id = wyliczony_stopien)
+                                  imie=imie, nazwisko=nazwisko, typ=typ, transport=srodek, stopien_id = wyliczony_stopien, nr_rozkazu = nr_rozkazu)
                     rekord.save()
             doc.render(context)
             doc.save(generated_doc)

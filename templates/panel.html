@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h1>Witaj w panelu sterowania</h1>
+
 
 <p>
     Aktualnie wypełnili formularz:<br>
@@ -12,10 +12,11 @@ PJ:
         <th>Stopień</th>
         <th>Imię</th>
         <th>Nazwisko</th>
-           <th>Miesiac</th>
+        <th>Miesiac</th>
         <th>Data wyjazdu</th>
         <th>Data powrotu</th>
         <th>Miasto</th>
+        <th>Nr rozkazu</th>
         <th>Usuń</th>
     </tr>
     {% for q in lista %}
@@ -27,6 +28,7 @@ PJ:
         <td> {{ q.data_wyjazdu }} </td>
         <td> {{ q.data_powrotu }} </td>
         <td> {{ q.miasto }} </td>
+        <td> {{ q.nr_rozkazu }}</td>
         <td>
             <form action="{% url 'record_delete' q.id %}" method="post">
                 {% csrf_token %}
@@ -51,6 +53,7 @@ Urlop:
         <th>Data wyjazdu</th>
         <th>Data powrotu</th>
         <th>Miasto</th>
+        <th>Nr rozkazu</th>
         <th>Usuń</th>
     </tr>
     {% for q in lista2 %}
@@ -62,6 +65,7 @@ Urlop:
         <td> {{ q.data_wyjazdu }} </td>
         <td> {{ q.data_powrotu }} </td>
         <td> {{ q.miasto }} </td>
+        <td> {{ q.nr_rozkazu }}</td>
         <td>
             <form action="{% url 'record_delete' q.id %}" method="post">
                 {% csrf_token %}

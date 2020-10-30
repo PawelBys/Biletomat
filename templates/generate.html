@@ -10,7 +10,9 @@
 <head>
 
   <style>
-
+    .czekbox {
+    margin-top : -35px;
+    }
     .normal {
     width: 300px;
     }
@@ -41,11 +43,11 @@
 
   <table >
     {% for field in form.visible_fields %}
-      <tr>
+      <tr style="vertical-align:middle">
         <th style="text-align:right">{{ field.label_tag }}</th>
         <td style="padding:5px">
 
-          {% render_field field  %}
+          {{ field }}
           <span style="color:red;">{{ field.errors }}</span>
 
           <br>

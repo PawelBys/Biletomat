@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'vj%ocfz$a$dy5)n5arz1i-g8dawmuqsq9o+%5ptv=m43)(md0h'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [  "bilety5kmp.pythonanywhere.com", "127.0.0.1"]
 
