@@ -6,9 +6,13 @@
 
 <p>
     Aktualnie wypełnili formularz:<br>
+
 PJ:
     <table border="1px">
     <tr>
+        <th>Doniesione</th>
+        <th>Nr</th>
+        <th> T </th>
         <th>Stopień</th>
         <th>Imię</th>
         <th>Nazwisko</th>
@@ -16,11 +20,23 @@ PJ:
         <th>Data wyjazdu</th>
         <th>Data powrotu</th>
         <th>Miasto</th>
-        <th>Nr rozkazu</th>
+
         <th>Usuń</th>
     </tr>
     {% for q in lista %}
     <tr>
+        <td style="text-align:center">
+            <form action="{% url 'save_changes' q.id %}" method="post">
+                {% csrf_token %}
+                {% if q.doniesione == 'X' %}
+                    <input type="submit" style="background-color:green;" value="Zapisz">
+                {% else %}
+                    <input type="submit" value="Zapisz">
+                {% endif %}
+            </form>
+        </td>
+        <td style="text-align:center"> {{ q.nr_rozkazu }}</td>
+        <td> {{ q.transport }}</td>
         <td> {{ q.stopien }}</td>
         <td> {{ q.imie }} </td>
         <td> {{ q.nazwisko.upper }} </td>
@@ -28,7 +44,7 @@ PJ:
         <td> {{ q.data_wyjazdu }} </td>
         <td> {{ q.data_powrotu }} </td>
         <td> {{ q.miasto }} </td>
-        <td> {{ q.nr_rozkazu }}</td>
+
         <td>
             <form action="{% url 'record_delete' q.id %}" method="post">
                 {% csrf_token %}
@@ -46,6 +62,9 @@ PJ:
 Urlop:
 <table border="1px">
     <tr>
+        <th>Doniesione</th>
+        <th>Nr</th>
+        <th> T </th>
         <th>Stopień</th>
         <th>Imię</th>
         <th>Nazwisko</th>
@@ -53,11 +72,22 @@ Urlop:
         <th>Data wyjazdu</th>
         <th>Data powrotu</th>
         <th>Miasto</th>
-        <th>Nr rozkazu</th>
         <th>Usuń</th>
     </tr>
     {% for q in lista2 %}
     <tr>
+        <td style="text-align:center">
+            <form action="{% url 'save_changes' q.id %}" method="post">
+                {% csrf_token %}
+                {% if q.doniesione == 'X' %}
+                    <input type="submit" style="background-color:green;" value="Zapisz">
+                {% else %}
+                    <input type="submit" value="Zapisz">
+                {% endif %}
+            </form>
+        </td>
+        <td style="text-align:center"> {{ q.nr_rozkazu }}</td>
+        <td> {{ q.transport }}</td>
         <td> {{ q.stopien }}</td>
         <td> {{ q.imie }} </td>
         <td> {{ q.nazwisko.upper }} </td>
@@ -65,7 +95,6 @@ Urlop:
         <td> {{ q.data_wyjazdu }} </td>
         <td> {{ q.data_powrotu }} </td>
         <td> {{ q.miasto }} </td>
-        <td> {{ q.nr_rozkazu }}</td>
         <td>
             <form action="{% url 'record_delete' q.id %}" method="post">
                 {% csrf_token %}

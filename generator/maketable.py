@@ -8,11 +8,15 @@ def dodaj_tabele(document, queryset):
         print(i)
         # formatowanie daty
         data = 'w dn. '
+        #jesli miesiace sa te same
         if str(i.data_powrotu)[5:7] == str(i.data_wyjazdu)[5:7]:
+            # dzien-
             data += str(i.data_wyjazdu)[8:10] + ' - '
         else:
+            #dzien.miesiac-
             data += str(i.data_wyjazdu)[8:10] + '.' + str(i.data_wyjazdu)[5:7] + ' - '
-        data += str(i.data_powrotu)[8:10] + '.' + str(i.data_wyjazdu)[5:7] + '.' + str(i.data_wyjazdu)[0:4] + ' r.'
+        #dzien.miesiac.rok
+        data += str(i.data_powrotu)[8:10] + '.' + str(i.data_przyjazdu)[5:7] + '.' + str(i.data_wyjazdu)[0:4] + ' r.'
         # wpisywanie danych do tabeli
         komorki = table.add_row().cells
         komorki[0].text = str(lp) + ')'

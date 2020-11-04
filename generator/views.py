@@ -6,7 +6,7 @@ from django.utils.dateparse import parse_date
 from docx import Document
 from docx.shared import Inches, Cm, Pt
 
-
+from Biletomat import settings
 from generator.models import Dane
 from .forms import BiletForm
 from docxtpl import DocxTemplate
@@ -29,6 +29,10 @@ def generuj(request):
     sample_ur = os.path.join(THIS_FOLDER, 'sample_ur.docx')
     generated_doc = os.path.join(THIS_FOLDER, 'generated_doc.docx')
 
+
+    data = settings.DATA_GRANICZNA
+
+
     if request.method == "POST":
         form = BiletForm(request.POST)
         if form.is_valid():
@@ -47,6 +51,10 @@ def generuj(request):
                 for i in typ_autobusu:
                     temp_typ_srodka += i + ", "
 
+            #jesli wybral srodek, to usun znacznik
+            czy_wybral_srodek = "X"
+            if (srodek != ""):
+                czy_wybral_srodek = ""
 
             typ_srodka = temp_typ_srodka[:-2]
             if request.POST.get('typ') == 'przepustkę jednorazową':
@@ -111,13 +119,13 @@ def generuj(request):
                     dana.miasto = miasto
                     dana.stopien = stopien
                     dana.typ = typ
-                    dana.transport = srodek
+                    dana.transport = czy_wybral_srodek
                     dana.miesiac=miesiac
                     dana.stopien_id = wyliczony_stopien
                     dana.nr_rozkazu = nr_rozkazu
                     dana.save()
                 else:
-                    rekord = Dane(data_wyjazdu = data_wyjazdu, data_powrotu=data_powrotu, miasto=miasto, stopien=stopien, imie=imie, nazwisko=nazwisko, typ=typ, transport=srodek, miesiac=miesiac, stopien_id = wyliczony_stopien, nr_rozkazu = nr_rozkazu)
+                    rekord = Dane(data_wyjazdu = data_wyjazdu, data_powrotu=data_powrotu, miasto=miasto, stopien=stopien, imie=imie, nazwisko=nazwisko, typ=typ, transport=czy_wybral_srodek, miesiac=miesiac, stopien_id = wyliczony_stopien, nr_rozkazu = nr_rozkazu)
                     rekord.save()
             else:
                 q = Dane.objects.filter(imie=imie, nazwisko=nazwisko, typ=typ, data_wyjazdu=data_wyjazdu, data_powrotu=data_powrotu)
@@ -128,13 +136,13 @@ def generuj(request):
                     dana.miasto = miasto
                     dana.stopien = stopien
                     dana.typ = typ
-                    dana.transport = srodek
+                    dana.transport = czy_wybral_srodek
                     dana.stopien_id = wyliczony_stopien
                     dana.nr_rozkazu = nr_rozkazu
                     dana.save()
                 else:
                     rekord = Dane(data_wyjazdu=data_wyjazdu, data_powrotu=data_powrotu, miasto=miasto, stopien=stopien,
-                                  imie=imie, nazwisko=nazwisko, typ=typ, transport=srodek, stopien_id = wyliczony_stopien, nr_rozkazu = nr_rozkazu)
+                                  imie=imie, nazwisko=nazwisko, typ=typ, transport=czy_wybral_srodek, stopien_id = wyliczony_stopien, nr_rozkazu = nr_rozkazu)
                     rekord.save()
             doc.render(context)
             doc.save(generated_doc)
@@ -143,13 +151,19 @@ def generuj(request):
             response = HttpResponse(open(generated_doc, 'rb').read())
             response['Content-Type'] = 'text/plain'
             response['Content-Disposition'] = 'attachment; filename=pobrane.docx'
+            # if date.today()<data:
+            print("TAK")
+
             return response
 
 
     context = {
         "form": form
     }
-    return render(request, "generate.html", context)
+    if date.today() > data and not request.user.is_authenticated:
+        return render(request, "no_permission.html")
+    else:
+        return render(request, "generate.html", context)
 
 def info(request, *args, **kwargs):
 
@@ -159,13 +173,23 @@ def record_delete(request, id):
     object = Dane.objects.filter(id=id)
     if request.method =='POST':
         object.delete()
+        return redirect('/panel')
 
+
+def save_changes(request, id):
+    object = Dane.objects.get(id=id)
+    if request.method =='POST':
+        if object.doniesione == "X":
+            object.doniesione = ""
+        else:
+            object.doniesione = "X"
+        object.save()
         return redirect('/panel')
 
 def panel(request, *args, **kwargs):
-    queryset1 = Dane.objects.filter(typ = 'przepustkę jednorazową').order_by('-stopien_id', 'nazwisko')
+    queryset1 = Dane.objects.filter(typ = 'przepustkę jednorazową').order_by('nr_rozkazu', 'nazwisko')
     ordered_queryset1 = queryset1
-    queryset2 = Dane.objects.filter(typ = 'urlop').order_by('-stopien_id', 'nazwisko')
+    queryset2 = Dane.objects.filter(typ = 'urlop').order_by('nr_rozkazu', 'nazwisko')
 
     context = {
         "lista": queryset1,
