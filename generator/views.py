@@ -18,8 +18,10 @@ from .maketable import switch_stopien
 
 
 def home_view(request, *args, **kwargs):
-
-    return render(request, "home.html")
+    context = {
+        'data' : settings.DATA_GRANICZNA.strftime("%d.%m.%Y")
+    }
+    return render(request, "home.html", context)
 
 
 def generuj(request):
