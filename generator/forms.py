@@ -51,5 +51,6 @@ class BiletForm(forms.Form):
     typ_pociagu = forms.MultipleChoiceField(choices=POCIAGI, widget=forms.CheckboxSelectMultiple(attrs={'class':'xxx'}), required=False, label="Typ pociągu")
     typ_autobusu = forms.MultipleChoiceField(choices=AUTOBUSY, widget=forms.CheckboxSelectMultiple(attrs={'class':'czekbox'}), required=False)
     kwota = forms.DecimalField(decimal_places=2, max_digits=10, label="Suma kwot z biletów", required=True, widget=forms.NumberInput(attrs={'class':'normal'}))
+    zgoda = forms.BooleanField(help_text="Zgadzam się na przetwarzanie danych potrzebnych do sporządzenia rozkazu zgodnie z informacjami zawartymi w zakładce 'FAQ' w punkcie 8.")
 
 
