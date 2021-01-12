@@ -36,7 +36,13 @@ PJ:
             </form>
         </td>
         <td style="text-align:center"> {{ q.nr_rozkazu }}</td>
-        <td> {{ q.transport }}</td>
+
+        {% if q.transport == "" %}
+            <td bgcolor="red">  </td>
+        {% else %}
+            <td bgcolor="green">  </td>
+        {% endif %}
+
         <td> {{ q.stopien }}</td>
         <td> {{ q.imie }} </td>
         <td> {{ q.nazwisko.upper }} </td>
@@ -87,7 +93,13 @@ Urlop:
             </form>
         </td>
         <td style="text-align:center"> {{ q.nr_rozkazu }}</td>
-        <td> {{ q.transport }}</td>
+
+        {% if q.transport == "" %}
+            <td bgcolor="red">  </td>
+        {% else %}
+            <td bgcolor="green">  </td>
+        {% endif %}
+
         <td> {{ q.stopien }}</td>
         <td> {{ q.imie }} </td>
         <td> {{ q.nazwisko.upper }} </td>
