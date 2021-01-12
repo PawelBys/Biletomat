@@ -16,7 +16,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 #BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-DATA_GRANICZNA = date(2020, 12, 1)
+DATA_GRANICZNA = date(2021, 13, 14)
 
 
 
@@ -27,7 +27,7 @@ DATA_GRANICZNA = date(2020, 12, 1)
 SECRET_KEY = 'vj%ocfz$a$dy5)n5arz1i-g8dawmuqsq9o+%5ptv=m43)(md0h'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [  "bilety5kmp.pythonanywhere.com", "127.0.0.1"]
 
