@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from docx import Document
 
 from docx.shared import Inches, Cm, Pt
-
+from docx.enum.table import WD_ROW_HEIGHT
 from Biletomat import settings
 from generator.models import Dane
 from .forms import BiletForm
@@ -150,6 +150,8 @@ def rozkaz(request):
     for tbl in tables:
         for row in tbl.rows:
             j=1
+            row.height_rule = WD_ROW_HEIGHT.EXACTLY
+            row.height = Inches(0.20)
             for cell in row.cells:
                 if j == 1: # 1)
                     cell.width = Inches(0.1)
@@ -160,11 +162,11 @@ def rozkaz(request):
                 if j == 4: # nazwisko
                     cell.width = Inches(1.5)
                 if j == 5:
-                    cell.width = Inches(2.1)
+                    cell.width = Inches(2.4)
                 if j == 6:
                     cell.width = Inches(0.6)
                 if j == 7:
-                    cell.width = Inches(1.5)
+                    cell.width = Inches(1.2)
                 j+=1
             i+=1
 
@@ -172,7 +174,7 @@ def rozkaz(request):
     # ustawianie marginesow
     sections = document.sections
     for section in sections:
-        section.top_margin = Cm(1.9)
+        section.top_margin = Cm(1.5)
         section.bottom_margin = Cm(1.59)
         section.left_margin = Cm(0.75)
         section.right_margin = Cm(1.32)
