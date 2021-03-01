@@ -16,7 +16,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 #BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-DATA_GRANICZNA = date(2021, 1, 14)
+DATA_GRANICZNA = date(2021, 3, 3)
 
 
 
