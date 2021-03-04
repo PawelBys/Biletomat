@@ -80,7 +80,7 @@ def save_changes(request, id):
 def panel(request, *args, **kwargs):
     queryset1 = Dane.objects.filter(typ = 'przepustkę jednorazową').order_by('nr_rozkazu', 'nazwisko')
     ordered_queryset1 = queryset1
-    queryset2 = Dane.objects.filter(typ = 'urlop').order_by('nr_rozkazu', 'nazwisko')
+    queryset2 = Dane.objects.filter(typ = 'urlop').order_by('data_wyjazdu', 'nazwisko')
 
     context = {
         "lista": queryset1,

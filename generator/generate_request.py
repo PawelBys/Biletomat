@@ -62,7 +62,11 @@ def generuj_ext(request, form, generated_doc):
 
         # dnia 24.09.2020 był nr rozkazu 76
         # odejmij datę wyjazdu od 24.09, uzyskane dni pocziel na 7 i pomnóż razy 2 - spodziewana liczba wydanych rozkazow
-        nr_rozkazu = int(76 + (((data_rozkazu - date(2020, 9, 24)).days + 1) / 7) * 2)
+        nr_rozkazu = 0
+        if(data_rozkazu.year == 2021):
+            nr_rozkazu = int(1 + (((data_rozkazu - date(2021, 1, 5)).days + 1) / 7) * 2)
+        if(data_rozkazu.year == 2020):
+            nr_rozkazu = int(76 + (((data_rozkazu - date(2020, 9, 24)).days + 1) / 7) * 2)
 
     context = {'stopien': request.POST.get('stopien'),
                'imie': request.POST.get('imie'),
@@ -119,6 +123,7 @@ def generuj_ext(request, form, generated_doc):
             dana.transport = srodek
             dana.stopien_id = wyliczony_stopien
             dana.nr_rozkazu = nr_rozkazu
+
             dana.save()
         else:
             rekord = Dane(data_wyjazdu=data_wyjazdu, data_powrotu=data_powrotu, miasto=miasto, stopien=stopien,

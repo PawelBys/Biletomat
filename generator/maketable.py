@@ -13,8 +13,10 @@ def dodaj_tabele(document, queryset):
         data = 'w dn. '
         #jesli miesiace sa te same
         if str(i.data_powrotu)[5:7] == str(i.data_wyjazdu)[5:7]:
-            # dzien-
-            data += str(i.data_wyjazdu)[8:10] + ' - '
+            #jesli PJ dluzsza niz 1 dzień
+            if str(i.data_wyjazdu)[8:10] != str(i.data_powrotu)[8:10]:
+                # dzien-
+                data += str(i.data_wyjazdu)[8:10] + ' - '
         else:
             #dzien.miesiac-
             data += str(i.data_wyjazdu)[8:10] + '.' + str(i.data_wyjazdu)[5:7] + ' - '
