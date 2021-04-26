@@ -1,16 +1,21 @@
+import calendar
+import datetime
 import os
 from datetime import timedelta, date
 
+from django.http import HttpResponse
 from django.utils.dateparse import parse_date
-
+from docx.shared import Inches, Pt, Cm
+from docx.enum.table import WD_ROW_HEIGHT
 from generator.models import Dane
-
+from docx import Document
 from docxtpl import DocxTemplate
 from generator.kwotaslownie import kwotaslownie
 
 # ze zmiennej request zbiera się informacje, np kto jest zalogowany
 
-from .maketable import switch_stopien
+from .maketable import switch_stopien, dodaj_stopke, dodaj_tabele, switch_litery, dodaj_naglowek
+
 
 def generuj_ext(request, form, generated_doc):
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
@@ -132,3 +137,103 @@ def generuj_ext(request, form, generated_doc):
             rekord.save()
     doc.render(context)
     doc.save(generated_doc)
+
+def generuj_rozkaz(request):
+    query1 = Dane.objects.filter(typ='przepustkę jednorazową', transport='kolejowym w klasie 2, w pociągu ').order_by(
+        '-stopien_id', 'nazwisko')
+    query2 = Dane.objects.filter(typ='urlop', transport='kolejowym w klasie 2, w pociągu ').order_by('-stopien_id',
+                                                                                                     'nazwisko')
+    query3 = Dane.objects.filter(typ='przepustkę jednorazową', transport='autobusowym w komunikacji ').order_by(
+        '-stopien_id', 'nazwisko')
+    query4 = Dane.objects.filter(typ='urlop', transport='autobusowym w komunikacji ').order_by('-stopien_id',
+                                                                                               'nazwisko')
+
+    THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+    generated_rozkaz = os.path.join(THIS_FOLDER, 'demo.docx')
+    document = Document()
+
+    dodaj_naglowek(document)
+
+    licznik = 1
+
+    tables = []
+
+    # tworzenie tabeli osobna funkcja
+    if query1:
+        p = document.add_paragraph(switch_litery(licznik) + 'na przepustkę jednorazową – środek transportu PKP:')
+        # p.paragraph_format.left_indent = Inches (0.25)
+        table1 = dodaj_tabele(document, query1)
+        tables.append(table1)
+        p.paragraph_format.space_before = Pt(12)
+
+    if query2:
+        licznik += 1
+        p = document.add_paragraph(switch_litery(licznik) + 'na urlop – środek transportu PKP:')
+        # p.paragraph_format.left_indent = Inches (0.25)
+        table2 = dodaj_tabele(document, query2)
+        tables.append(table2)
+        p.paragraph_format.space_before = Pt(12)
+    if query3:
+        licznik += 1
+        p = document.add_paragraph(switch_litery(licznik) + 'na przepustkę jednorazową – środek transportu PKS:')
+        # p.paragraph_format.left_indent = Inches (0.25)
+        table3 = dodaj_tabele(document, query3)
+        tables.append(table3)
+        p.paragraph_format.space_before = Pt(12)
+    if query4:
+        licznik += 1
+        p = document.add_paragraph(switch_litery(licznik) + 'na urlop – środek transportu PKS:')
+        # p.paragraph_format.left_indent = Inches (0.25)
+        table4 = dodaj_tabele(document, query4)
+        tables.append(table4)
+        p.paragraph_format.space_before = Pt(12)
+
+    # ustawianie parametrów dokumentu
+    style = document.styles['Normal']
+    font = style.font
+    font.name = 'Times New Roman'
+    font.size = Pt(12)
+
+    # ustawianie szerokosci tabelek
+    i = 1
+    for tbl in tables:
+        for row in tbl.rows:
+            j = 1
+            row.height_rule = WD_ROW_HEIGHT.EXACTLY
+            row.height = Inches(0.20)
+            for cell in row.cells:
+                if j == 1:  # 1)
+                    cell.width = Inches(0.1)
+                if j == 2:  # stopien
+                    cell.width = Inches(1.25)
+                if j == 3:  # imie
+                    cell.width = Inches(0.9)
+                if j == 4:  # nazwisko
+                    cell.width = Inches(1.5)
+                if j == 5:
+                    cell.width = Inches(2.4)
+                if j == 6:
+                    cell.width = Inches(0.6)
+                if j == 7:
+                    cell.width = Inches(1.2)
+                j += 1
+            i += 1
+
+    dodaj_stopke(document)
+    # ustawianie marginesow
+    sections = document.sections
+    for section in sections:
+        section.top_margin = Cm(1.5)
+        section.bottom_margin = Cm(1.59)
+        section.left_margin = Cm(0.75)
+        section.right_margin = Cm(1.32)
+
+    # download
+    document.save(generated_rozkaz)
+    response = HttpResponse(open(generated_rozkaz, 'rb').read())
+    response['Content-Type'] = 'text/plain'
+    previous_month = datetime.datetime.today().month - 1
+    previous_month_name = calendar.month_name[previous_month]  # ustawienie nazwy pliku z rozkazem
+    response['Content-Disposition'] = 'attachment; filename= rozkaz"{}".docx'.format(previous_month_name)
+
+    return response

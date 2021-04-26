@@ -27,7 +27,7 @@ DATA_GRANICZNA = date(2021, 4, 12)
 SECRET_KEY = 'vj%ocfz$a$dy5)n5arz1i-g8dawmuqsq9o+%5ptv=m43)(md0h'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [  "bilety5kmp.pythonanywhere.com", "127.0.0.1"]
 
@@ -57,6 +57,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Biletomat.urls'
+
+AUTHENTICATION_BACKENDS = (
+        'django.contrib.auth.backends.ModelBackend',
+    )
 
 TEMPLATES = [
     {
@@ -145,3 +149,5 @@ STATIC_ROOT = '/static/'
 
 DATE_FORMAT = 'd-m-Y'
 #USE_L10N = False
+
+LOGIN_REDIRECT_URL = '/'

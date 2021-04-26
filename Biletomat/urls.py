@@ -17,7 +17,12 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import include, path
 
-from generator.views import home_view, panel, generuj, info, rozkaz, record_delete, save_changes
+from generator.views import home_view, panel, generuj, info, rozkaz, record_delete, save_changes, wnioski
+from generator.my_auth.login_user import my_login
+from generator.my_auth.register_user import my_register
+from generator.my_auth.logout_user import my_logout
+
+
 # tutaj dodaje się kolejne "widoki" - podstrony, trzeba je mieć w pliku views jako funkcję
 
 app_name = 'generator'
@@ -31,6 +36,10 @@ urlpatterns = [
     path('info/', info, name='info'),
     path('rozkaz/', rozkaz, name='rozkaz'),
     path('no_permission/', panel, name='panel'),
+    path('wnioski/', wnioski, name='wnioski'),
+    path('login/', my_login, name='login'),
+    path('register/', my_register, name='register'),
+    path('logout/', my_logout, name='logout'),
     url(r'^delete/(?P<id>[0-9]+)/$', record_delete , name='record_delete'),
     url(r'^save/(?P<id>[0-9]+)/$', save_changes, name='save_changes'),
 ]

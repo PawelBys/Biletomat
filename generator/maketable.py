@@ -2,7 +2,6 @@
 from docx.shared import Inches, Pt
 
 
-
 def dodaj_tabele(document, queryset):
     table = document.add_table(rows=0, cols=7)
 

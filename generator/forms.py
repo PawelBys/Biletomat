@@ -2,6 +2,7 @@ from datetime import date, timedelta
 
 
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.forms import DateInput
 
@@ -53,4 +54,8 @@ class BiletForm(forms.Form):
     kwota = forms.DecimalField(decimal_places=2, max_digits=10, label="Suma kwot z biletów", required=True, widget=forms.NumberInput(attrs={'class':'normal'}))
     zgoda = forms.BooleanField(help_text="Zgadzam się na przetwarzanie danych potrzebnych do sporządzenia rozkazu zgodnie z informacjami zawartymi w zakładce 'FAQ' w punkcie 8.")
 
+class LoginForm(forms.Form):
+    login = forms.CharField(max_length=50, label="Login", widget=forms.TextInput)
+    password = forms.CharField(max_length=50, label="Hasło", widget=forms.PasswordInput)
 
+# class RegisterForm(UserCreationForm):
