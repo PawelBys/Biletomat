@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from importlib._common import _
+#from importlib._common import _
 
 from django import forms
 from django.contrib.auth import password_validation
@@ -83,15 +83,7 @@ class RegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ("username",)
-        # labels = {
-        #     "username": _('Nazwa użytkownika'),
-        # }
-        help_texts= {
-            'username':_('Wymagane. Litery, cyfry i znaki @/./+/-/_ są dozwolone.')
-        }
-        model.username.error_messages ={
-            'unique': _("Użytkownik z taką nazwą już istnieje."),
-        }
+
 
 
 
