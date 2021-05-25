@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 class Dane(models.Model):
@@ -35,3 +36,15 @@ class RightsSupport(models.Model):
             ('user_rights', 'Globalne uprawnienia użytkownika'),
 
         )
+
+class UserProfile(models.Model):
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    imie = models.CharField(max_length=30)
+    nazwisko = models.CharField(max_length=30)
+    adres = models.CharField(max_length=100, default='')
+    stopien = models.CharField(max_length=30)
+    pluton = models.CharField(max_length=1)
+    wydzial = models.CharField(max_length=5)
+    grupa = models.CharField(max_length=10)

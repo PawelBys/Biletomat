@@ -3,11 +3,12 @@ import datetime
 import os
 from datetime import timedelta, date
 
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.utils.dateparse import parse_date
 from docx.shared import Inches, Pt, Cm
 from docx.enum.table import WD_ROW_HEIGHT
-from generator.models import Dane
+from generator.models import Dane, UserProfile
 from docx import Document
 from docxtpl import DocxTemplate
 from generator.kwotaslownie import kwotaslownie
@@ -21,6 +22,8 @@ def generuj_ext(request, form, generated_doc):
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
     sample_pj = os.path.join(THIS_FOLDER, 'sample_pj.docx')
     sample_ur = os.path.join(THIS_FOLDER, 'sample_ur.docx')
+
+
 
     typ_pociagu = form.cleaned_data.get('typ_pociagu')
     typ_autobusu = form.cleaned_data.get('typ_autobusu')
@@ -45,9 +48,12 @@ def generuj_ext(request, form, generated_doc):
     data_wyjazdu = request.POST.get('data_wyjazdu')
     data_powrotu = request.POST.get('data_powrotu')
     miasto = request.POST.get('miasto')
-    stopien = request.POST.get('stopien')
-    imie = request.POST.get('imie')
-    nazwisko = request.POST.get('nazwisko')
+    this_user = User.objects.get(id=request.user.id)
+    stopien = this_user.userprofile.stopien
+    imie = this_user.userprofile.imie
+    nazwisko = this_user.userprofile.nazwisko
+    adres = this_user.userprofile.adres
+    pluton = this_user.userprofile.pluton
     typ = request.POST.get('typ')
     miesiac = request.POST.get('miesiac')
 
@@ -73,11 +79,11 @@ def generuj_ext(request, form, generated_doc):
         if(data_rozkazu.year == 2020):
             nr_rozkazu = int(76 + (((data_rozkazu - date(2020, 9, 24)).days + 1) / 7) * 2)
 
-    context = {'stopien': request.POST.get('stopien'),
-               'imie': request.POST.get('imie'),
-               'nazwisko': request.POST.get('nazwisko'),
-               'adres': request.POST.get('adres'),
-               'pluton': request.POST.get('pluton'),
+    context = {'stopien':stopien,
+               'imie': imie,
+               'nazwisko':nazwisko,
+               'adres':adres,
+               'pluton':pluton,
                'data_przed': parse_date(request.POST.get('data_wyjazdu')) - timedelta(days=1),
                'data_wyjazdu': request.POST.get('data_wyjazdu'),
                'data_powrotu': request.POST.get('data_powrotu'),

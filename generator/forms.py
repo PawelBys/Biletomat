@@ -1,10 +1,14 @@
 from datetime import date, timedelta
-
+from importlib._common import _
 
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import password_validation
+from django.contrib.auth.forms import UserCreationForm, UsernameField
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.forms import DateInput
+
+from generator.models import UserProfile
 
 
 class DateInput(forms.DateInput):
@@ -37,11 +41,11 @@ class BiletForm(forms.Form):
 
 
     typ = forms.CharField(widget=forms.Select(choices=TYP, attrs={'class':'normal'}))
-    imie = forms.CharField(max_length=50, label="Imię", widget=forms.TextInput(attrs={'class':'normal'})  )
-    nazwisko = forms.CharField(max_length=50, label="Nazwisko", widget=forms.TextInput(attrs={'class':'normal'}))
-    stopien = forms.CharField(widget=forms.Select(choices=STOPNIE, attrs={'class':'normal'}), label="Stopień")
-    adres = forms.CharField(max_length=100, initial='', help_text="WZÓR: ul. Kolejowa 7/23, 01-476 Warszawa", widget=forms.TextInput(attrs={'class':'normal'}))
-    pluton = forms.CharField(widget=forms.Select(choices=PLUTONY, attrs={'class':'normal'}))
+    # imie = forms.CharField(max_length=50, label="Imię", widget=forms.TextInput(attrs={'class':'normal'})  )
+    # nazwisko = forms.CharField(max_length=50, label="Nazwisko", widget=forms.TextInput(attrs={'class':'normal'}))
+    # stopien = forms.CharField(widget=forms.Select(choices=STOPNIE, attrs={'class':'normal'}), label="Stopień")
+    # adres = forms.CharField(max_length=100, initial='', help_text="WZÓR: ul. Kolejowa 7/23, 01-476 Warszawa", widget=forms.TextInput(attrs={'class':'normal'}))
+    # pluton = forms.CharField(widget=forms.Select(choices=PLUTONY, attrs={'class':'normal'}))
     #data_wyjazdu = forms.DateField(widget=DateInput(attrs={'class':'data'}), initial=date.today(), help_text="Data z blankietu (np. sobota, nie piątek)")
     #data_powrotu = forms.DateField( widget=DateInput(attrs={'class':'data'}), initial=date.today())
     data_wyjazdu = forms.DateField(widget=DateInput, initial=date.today(), label="Data rozpoczęcia PJ/urlopu", help_text="Data rozpoczęcia urlopu/PJ z blankietu, nie fizycznego wyjazdu (zazwyczaj wyjeżdża się dzień wcześniej)" )
@@ -58,4 +62,61 @@ class LoginForm(forms.Form):
     login = forms.CharField(max_length=50, label="Login", widget=forms.TextInput)
     password = forms.CharField(max_length=50, label="Hasło", widget=forms.PasswordInput)
 
-# class RegisterForm(UserCreationForm):
+class RegisterForm(UserCreationForm):
+    STOPNIE = (
+    ('szer. pchor.', 'szer. pchor.'), ('st. szer. pchor.', 'st. szer. pchor.'), ('kpr. pchor.', 'kpr. pchor.'),
+    ('st. kpr. pchor.', 'st. kpr. pchor.'), ('plut. pchor.', 'plut. pchor.'), ('sierż. pchor.', 'sierż. pchor.'))
+    PLUTONY = ((1, 1), (2, 2), (3, 3), (4, 4), (5, 5))
+    WYDZIALY = ( ('WCY','WCY'),('WIG','WIG'),('WTC','WTC'),('WEL','WEL'),('WIM','WIM'),('WML','WML'),('WLO','WLO'),  )
+
+
+    imie = forms.CharField(max_length=50, label="Imię", widget=forms.TextInput(attrs={'class': 'normal'}))
+    nazwisko = forms.CharField(max_length=50, label="Nazwisko", widget=forms.TextInput(attrs={'class': 'normal'}))
+    stopien = forms.CharField(widget=forms.Select(choices=STOPNIE, attrs={'class': 'normal'}), label="Stopień")
+    adres = forms.CharField(max_length=100, initial='', help_text="WZÓR: ul. Kolejowa 7/23, 01-476 Warszawa",
+                            widget=forms.TextInput(attrs={'class': 'normal'}))
+    pluton = forms.CharField(widget=forms.Select(choices=PLUTONY, attrs={'class': 'normal'}))
+    wydzial = forms.CharField(widget=forms.Select(choices=WYDZIALY, attrs={'class': 'normal'}), label="Wydział")
+    grupa = forms.CharField(max_length=50, label="Grupa", widget=forms.TextInput(attrs={'class': 'normal'}))
+
+
+    class Meta:
+        model = User
+        fields = ("username",)
+        # labels = {
+        #     "username": _('Nazwa użytkownika'),
+        # }
+        help_texts= {
+            'username':_('Wymagane. Litery, cyfry i znaki @/./+/-/_ są dozwolone.')
+        }
+        model.username.error_messages ={
+            'unique': _("Użytkownik z taką nazwą już istnieje."),
+        }
+
+
+
+    def save(self, commit=True):
+        if not commit:
+            raise NotImplementedError("Can't create User and UserProfile without database save")
+        imie = self.cleaned_data['imie']
+        nazwisko = self.cleaned_data['nazwisko']
+        stopien = self.cleaned_data['stopien']
+        adres = self.cleaned_data['adres']
+        pluton = self.cleaned_data['pluton']
+        wydzial = self.cleaned_data['wydzial']
+        grupa = self.cleaned_data['grupa']
+
+        user = super(RegisterForm, self).save(commit=True)
+        userProfile = UserProfile.objects.create(
+            user=user,
+            imie=imie,
+            nazwisko = nazwisko,
+            stopien = stopien,
+            adres = adres,
+            pluton = pluton,
+            wydzial = wydzial,
+            grupa = grupa
+        )
+
+        userProfile.save()
+        return user
