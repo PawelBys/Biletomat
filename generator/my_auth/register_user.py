@@ -1,3 +1,5 @@
+import os
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 
@@ -11,4 +13,4 @@ def my_register(request):
             return response
     else:
         form = UserCreationForm()
-    return render(request, 'register.html', {"form":form})
+    return render(request, 'register.html', {"form":form, 'fontColor': os.getenv('FONT_COLOR')})

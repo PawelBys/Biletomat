@@ -1,3 +1,5 @@
+import os
+
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 
@@ -20,10 +22,10 @@ def my_login(request):
                     login(request, user)
                     return response
                 else:
-                    return render(request, "login.html", {'form': LoginForm(request.POST)})
+                    return render(request, "login.html", {'form': LoginForm(request.POST), 'fontColor': os.getenv('FONT_COLOR')})
                 return
             else:
-                return render(request, "no_permission.html")
-        return render(request, "login.html", {'form': LoginForm()})
+                return render(request, "no_permission.html", {'fontColor': os.getenv('FONT_COLOR')})
+        return render(request, "login.html", {'form': LoginForm(), 'fontColor': os.getenv('FONT_COLOR')})
     else:
         return response

@@ -10,6 +10,7 @@ from docx import Document
 from docx.shared import Inches, Cm, Pt
 from docx.enum.table import WD_ROW_HEIGHT
 from Biletomat import settings
+from Biletomat.settings import FONT_COLOR
 from generator.models import Dane
 from .forms import BiletForm
 import datetime
@@ -21,9 +22,12 @@ from .maketable import dodaj_tabele, dodaj_naglowek, dodaj_stopke, switch_litery
 from .generate_request import generuj_ext, generuj_rozkaz
 
 
+
+
 def home_view(request, *args, **kwargs):
     context = {
-        'data' : settings.DATA_GRANICZNA.strftime("%d.%m.%Y")
+        'data' : settings.DATA_GRANICZNA.strftime("%d.%m.%Y"),
+        'fontColor': os.getenv('FONT_COLOR')
     }
 
     # jesli uzytkownik jest zalogowany, to wyswietl normalna strone
@@ -55,7 +59,8 @@ def generuj(request):
             return response
 
     context = {
-        "form": form
+        "form": form,
+        'fontColor': os.getenv('FONT_COLOR')
     }
     if date.today() > data and not request.user.is_authenticated:
         return render(request, "no_permission.html")
@@ -65,7 +70,10 @@ def generuj(request):
 
 def info(request, *args, **kwargs):
 
-    return render(request, "info.html")
+    context = {
+        'fontColor': os.getenv('FONT_COLOR')
+    }
+    return render(request, "info.html", context)
 
 #funkcja do usuwania rekordow
 def record_delete(request, id):
@@ -94,7 +102,8 @@ def panel(request, *args, **kwargs):
 
     context = {
         "lista": queryset1,
-        "lista2":queryset2
+        "lista2":queryset2,
+        'fontColor': os.getenv('FONT_COLOR')
     }
     if request.user.is_superuser:
         return render(request, "panel.html", context)
@@ -105,7 +114,7 @@ def panel(request, *args, **kwargs):
 def rozkaz(request):
 
 # osobna metoda w pliku generate_request
-    if request.user.has_view_permission():
+    if request.user.is_superuser:
         return generuj_rozkaz(request)
     else:
         return render(request, "no_permission.html")
