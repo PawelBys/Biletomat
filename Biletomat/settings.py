@@ -19,6 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_GRANICZNA = date(2021, 5, 12)
 
 FONT_COLOR = "black"
+#cos
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
