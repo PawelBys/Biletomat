@@ -58,6 +58,7 @@ def generuj(request):
 
             return response
 
+
     context = {
         "form": form,
         'fontColor': os.getenv('FONT_COLOR')
@@ -122,6 +123,6 @@ def rozkaz(request):
 
 def wnioski(request):
 
-    # if request.user.username ==
+
 
     return render(request, "wniosek.html")

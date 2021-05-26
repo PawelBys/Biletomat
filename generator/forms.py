@@ -56,7 +56,7 @@ class BiletForm(forms.Form):
     typ_pociagu = forms.MultipleChoiceField(choices=POCIAGI, widget=forms.CheckboxSelectMultiple(attrs={'class':'xxx'}), required=False, label="Typ pociągu")
     typ_autobusu = forms.MultipleChoiceField(choices=AUTOBUSY, widget=forms.CheckboxSelectMultiple(attrs={'class':'czekbox'}), required=False)
     kwota = forms.DecimalField(decimal_places=2, max_digits=10, label="Suma kwot z biletów", required=True, widget=forms.NumberInput(attrs={'class':'normal'}))
-    zgoda = forms.BooleanField(help_text="Zgadzam się na przetwarzanie danych potrzebnych do sporządzenia rozkazu zgodnie z informacjami zawartymi w zakładce 'FAQ' w punkcie 8.")
+    zgoda = forms.BooleanField(help_text="Zgadzam się na przetwarzanie danych potrzebnych do sporządzenia rozkazu zgodnie z informacjami zawartymi w zakładce 'FAQ' w punkcie 10.")
 
 class LoginForm(forms.Form):
     login = forms.CharField(max_length=50, label="Login", widget=forms.TextInput)
@@ -112,3 +112,42 @@ class RegisterForm(UserCreationForm):
 
         userProfile.save()
         return user
+
+class HdkForm(forms.Form):
+    data_poczatku = forms.DateField(widget=DateInput, initial=date.today(), label="Data początku urlopu", required=True)
+    data_konca = forms.DateField(widget=DateInput, initial=date.today(), label="Data końca urlopu", required=True)
+    data_oddania = forms.DateField(widget=DateInput, initial=date.today(), label="Data oddania krwi", required=True)
+    miejscowosc = forms.CharField(max_length=30, label="Miasto",
+                             widget=forms.TextInput(attrs={'class': 'normal'}), required=True,
+                                  help_text="Na urlop udam się do miejscowości:")
+    motywacja = forms.CharField(max_length=200, label="Motywacja",
+                                 widget=forms.TextInput(attrs={'class': 'normal'}),
+                                 help_text="Dokończ zdanie (bez kropki na końcu)",
+                                initial="Wniosek swój motywuję ", required=True)
+    zaleglosci = forms.CharField(max_length=200, label="Zaległości",
+                                  widget=forms.TextInput(attrs={'class': 'normal'}),
+                                  help_text="nie posiadam zaległości w nauce/posiadam zaległości:... (wymień)(bez kropki na końcu)",
+                                initial="nie posiadam zaległości w nauce", required=True)
+    kary = forms.CharField(max_length=200, label="Kary dyscyplinarne",
+                                  widget=forms.TextInput(attrs={'class': 'normal'}),
+                                   help_text="nie posiadam kar dyscyplinarnych/posiadam kary:...(wymień)(bez kropki na końcu)",
+                                   initial="nie posiadam kar dyscyplinarnych", required=True)
+
+class PjForm(forms.Form):
+    data_poczatku = forms.DateField(widget=DateInput, initial=date.today(), label="Data początku pj", required=True)
+    data_konca = forms.DateField(widget=DateInput, initial=date.today(), label="Data końca pj", required=True)
+    miejscowosc = forms.CharField(max_length=30, label="Miasto",
+                             widget=forms.TextInput(attrs={'class': 'normal'}), required=True,
+                                  help_text="Na przepustkę udam się do miejscowości:")
+    motywacja = forms.CharField(max_length=200, label="Motywacja",
+                                 widget=forms.TextInput(attrs={'class': 'normal'}),
+                                 help_text="Dokończ zdanie (bez kropki na końcu)",
+                                initial="Wniosek swój motywuję ", required=True)
+    zaleglosci = forms.CharField(max_length=200, label="Zaległości",
+                                  widget=forms.TextInput(attrs={'class': 'normal'}),
+                                  help_text="nie posiadam zaległości w nauce/posiadam zaległości:... (wymień)(bez kropki na końcu)",
+                                initial="nie posiadam zaległości w nauce", required=True)
+    kary = forms.CharField(max_length=200, label="Kary dyscyplinarne",
+                                  widget=forms.TextInput(attrs={'class': 'normal'}),
+                                   help_text="nie posiadam kar dyscyplinarnych/posiadam kary:...(wymień)(bez kropki na końcu)",
+                                   initial="nie posiadam kar dyscyplinarnych", required=True)

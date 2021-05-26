@@ -63,6 +63,7 @@ def generuj_ext(request, form, generated_doc):
     # liczenie nr rozkazu batalionowego
     wstepna_data = parse_date(request.POST.get('data_wyjazdu'))
     # wstepna_data = parse_date(date(data_wyjazdu.year))
+    data_zlozenia = str(date.today()+ timedelta(days=3)) + " r."
     data_rozkazu = '.............'
     nr_rozkazu = '.............'
     if wstepna_data.weekday() == 5 or wstepna_data.weekday() == 4:
@@ -97,7 +98,7 @@ def generuj_ext(request, form, generated_doc):
                'powrot': request.POST.get('tam_z_powrotem'),
                'data_rozkazu': data_rozkazu,
                'nr_rozkazu': nr_rozkazu,
-
+                'data_zlozenia': data_zlozenia,
                }
     nazwisko = nazwisko.upper()
     # tworzenie obiektu bazy danych

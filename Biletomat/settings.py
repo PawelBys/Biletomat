@@ -148,7 +148,7 @@ MEDIA_URL = '/templates/'
 
 STATIC_ROOT = '/static/'
 
-DATE_FORMAT = 'd-m-Y'
-#USE_L10N = False
+DATE_FORMAT = 'dd.mm.YY'
+USE_L10N = True
 
 LOGIN_REDIRECT_URL = '/'
