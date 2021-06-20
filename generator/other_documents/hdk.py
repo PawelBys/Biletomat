@@ -72,7 +72,8 @@ def generuj_wniosek_hdk(request):
 
     context = {
         "form": form,
-        'fontColor': os.getenv('FONT_COLOR')
+        'fontColor': os.getenv('FONT_COLOR'),
+        'typ_wniosku': 'Wniosek o urlop HDK'
     }
     if not request.user.is_authenticated:
         return render(request, "no_permission.html")

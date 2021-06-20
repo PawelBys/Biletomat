@@ -8,14 +8,14 @@ from django.utils import formats
 from docxtpl import DocxTemplate
 
 from generator.date_format import get_date
-from generator.forms import HdkForm
+from generator.forms import HdkForm, NagrodowyForm
 
 
 def generuj_wniosek_nagrodowy(request):
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
-    sample_hdk = os.path.join(THIS_FOLDER, 'sample_nagrodowy.docx')
+    sample_nagrodowy = os.path.join(THIS_FOLDER, 'sample_nagrodowy.docx')
 
-    generated_hdk = os.path.join(THIS_FOLDER, 'generated_nagrodowy.docx')
+    generated_nagrodowy = os.path.join(THIS_FOLDER, 'generated_nagrodowy.docx')
 
     form=NagrodowyForm()
     if request.method == "POST":
@@ -26,7 +26,8 @@ def generuj_wniosek_nagrodowy(request):
             data_konca = form.cleaned_data.get('data_konca')
             data_urlopu = get_date(data_poczatku, data_konca)
 
-            data_oddania =form.cleaned_data.get('data_oddania')
+            data_rozkazu =form.cleaned_data.get('data_rozkazu')
+            nr_rozkazu =form.cleaned_data.get('nr_rozkazu')
             miejscowosc =form.cleaned_data.get('miejscowosc')
             motywacja =form.cleaned_data.get('motywacja')
             zaleglosci =form.cleaned_data.get('zaleglosci')
@@ -52,27 +53,29 @@ def generuj_wniosek_nagrodowy(request):
                 'grupa':grupa,
                 'data':str(date.today()),
                 'data_urlopu':data_urlopu,
-                'data_oddania':formats.date_format(data_oddania,"DATE_FORMAT"),
+                'data_rozkazu':formats.date_format(data_rozkazu,"DATE_FORMAT"),
+                'nr_rozkazu':nr_rozkazu,
                 'miejscowosc':miejscowosc,
                 "motywacja":motywacja,
                 'zaleglosci':zaleglosci,
                 'kary':kary,
 
             }
-            doc = DocxTemplate(open(sample_hdk, "rb"))
+            doc = DocxTemplate(open(sample_nagrodowy, "rb"))
             doc.render(context)
-            doc.save(generated_hdk)
+            doc.save(generated_nagrodowy)
 
-            response = HttpResponse(open(generated_hdk, 'rb').read())
+            response = HttpResponse(open(generated_nagrodowy, 'rb').read())
             response['Content-Type'] = 'text/plain'
 
-            response['Content-Disposition'] = 'attachment; filename = wniosek_hdk.docx'
+            response['Content-Disposition'] = 'attachment; filename = wniosek_nagrodowy.docx'
 
             return response
 
     context = {
         "form": form,
-        'fontColor': os.getenv('FONT_COLOR')
+        'fontColor': os.getenv('FONT_COLOR'),
+        'typ_wniosku': 'Wniosek nagrodowy'
     }
     if not request.user.is_authenticated:
         return render(request, "no_permission.html")

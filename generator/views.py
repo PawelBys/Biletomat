@@ -61,7 +61,8 @@ def generuj(request):
 
     context = {
         "form": form,
-        'fontColor': os.getenv('FONT_COLOR')
+        'fontColor': os.getenv('FONT_COLOR'),
+        'typ_wniosku': 'Wniosek o zwrot kosztów przejazu'
     }
     if date.today() > data and not request.user.is_authenticated:
         return render(request, "no_permission.html")

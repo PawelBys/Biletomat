@@ -113,41 +113,34 @@ class RegisterForm(UserCreationForm):
         userProfile.save()
         return user
 
-class HdkForm(forms.Form):
-    data_poczatku = forms.DateField(widget=DateInput, initial=date.today(), label="Data początku urlopu", required=True)
-    data_konca = forms.DateField(widget=DateInput, initial=date.today(), label="Data końca urlopu", required=True)
-    data_oddania = forms.DateField(widget=DateInput, initial=date.today(), label="Data oddania krwi", required=True)
-    miejscowosc = forms.CharField(max_length=30, label="Miasto",
-                             widget=forms.TextInput(attrs={'class': 'normal'}), required=True,
-                                  help_text="Na urlop udam się do miejscowości:")
-    motywacja = forms.CharField(max_length=200, label="Motywacja",
-                                 widget=forms.TextInput(attrs={'class': 'normal'}),
-                                 help_text="Dokończ zdanie (bez kropki na końcu)",
-                                initial="Wniosek swój motywuję ", required=True)
-    zaleglosci = forms.CharField(max_length=200, label="Zaległości",
-                                  widget=forms.TextInput(attrs={'class': 'normal'}),
-                                  help_text="nie posiadam zaległości w nauce/posiadam zaległości:... (wymień)(bez kropki na końcu)",
-                                initial="nie posiadam zaległości w nauce", required=True)
-    kary = forms.CharField(max_length=200, label="Kary dyscyplinarne",
-                                  widget=forms.TextInput(attrs={'class': 'normal'}),
-                                   help_text="nie posiadam kar dyscyplinarnych/posiadam kary:...(wymień)(bez kropki na końcu)",
-                                   initial="nie posiadam kar dyscyplinarnych", required=True)
 
-class PjForm(forms.Form):
-    data_poczatku = forms.DateField(widget=DateInput, initial=date.today(), label="Data początku pj", required=True)
-    data_konca = forms.DateField(widget=DateInput, initial=date.today(), label="Data końca pj", required=True)
+class WniosekForm(forms.Form):
+    data_poczatku = forms.DateField(widget=DateInput, initial=date.today(), label="Data początku pj/urlopu", required=True)
+    data_konca = forms.DateField(widget=DateInput, initial=date.today(), label="Data końca pj/urlopu", required=True)
     miejscowosc = forms.CharField(max_length=30, label="Miasto",
-                             widget=forms.TextInput(attrs={'class': 'normal'}), required=True,
-                                  help_text="Na przepustkę udam się do miejscowości:")
+                                  widget=forms.TextInput(attrs={'class': 'normal'}), required=True,
+                                  help_text="Na przepustkę/urlop udam się do miejscowości:")
     motywacja = forms.CharField(max_length=200, label="Motywacja",
-                                 widget=forms.TextInput(attrs={'class': 'normal'}),
-                                 help_text="Dokończ zdanie (bez kropki na końcu)",
+                                widget=forms.TextInput(attrs={'class': 'normal'}),
+                                help_text="Dokończ zdanie (bez kropki na końcu)",
                                 initial="Wniosek swój motywuję ", required=True)
     zaleglosci = forms.CharField(max_length=200, label="Zaległości",
-                                  widget=forms.TextInput(attrs={'class': 'normal'}),
-                                  help_text="nie posiadam zaległości w nauce/posiadam zaległości:... (wymień)(bez kropki na końcu)",
-                                initial="nie posiadam zaległości w nauce", required=True)
+                                 widget=forms.TextInput(attrs={'class': 'normal'}),
+                                 help_text="nie posiadam zaległości w nauce/posiadam zaległości:... (wymień)(bez kropki na końcu)",
+                                 initial="nie posiadam zaległości w nauce", required=True)
     kary = forms.CharField(max_length=200, label="Kary dyscyplinarne",
-                                  widget=forms.TextInput(attrs={'class': 'normal'}),
-                                   help_text="nie posiadam kar dyscyplinarnych/posiadam kary:...(wymień)(bez kropki na końcu)",
-                                   initial="nie posiadam kar dyscyplinarnych", required=True)
+                           widget=forms.TextInput(attrs={'class': 'normal'}),
+                           help_text="nie posiadam kar dyscyplinarnych/posiadam kary:...(wymień)(bez kropki na końcu)",
+                           initial="nie posiadam kar dyscyplinarnych", required=True)
+
+class HdkForm(WniosekForm):
+
+    data_oddania = forms.DateField(widget=DateInput, initial=date.today(), label="Data oddania krwi", required=True)
+
+
+class NagrodowyForm(WniosekForm):
+    nr_rozkazu = forms.CharField(max_length=10, label="Nr rozkazu",
+                             widget=forms.TextInput(attrs={'class': 'normal'}), required=True,
+                                  help_text="Nr rozkazu w którym udzielony był urlop nagrodowy (np. 19/2021)")
+    data_rozkazu = forms.DateField(widget=DateInput, initial=date.today(), label="Dzień wydania rozkazu",
+                                    help_text="Dzień wydania rozkazu w którym udzielony był urlop nagrodowy",required=True)
