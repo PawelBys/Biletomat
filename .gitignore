@@ -1,3 +1,6 @@
 venv/
 db.sqlite3
 generator/generated_doc.docx
+generator/other_documents/generated_hdk.docx
+generator/other_documents/generated_nagrodowy.docx
+generator/other_documents/generated_pj.docx

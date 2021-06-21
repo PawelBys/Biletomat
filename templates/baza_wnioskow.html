@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.item{
+<!--    padding: 10px;-->
+ }
+</style>
+
+
+<h1>Wzory wniosków do pobrania.</h1>
+
+<div class="container">
+
+    <div class="item">
+        <a href="{% url 'download_wniosek' 2 %}" onclick="" class=""><h3>HDK</h3></a>
+    </div>
+    <div class="item">
+        <a href="{% url 'download_wniosek' 3 %}" onclick="" class=""><h3>Nagrodowy</h3></a>
+    </div>
+    <div class="item">
+        <a href="{% url 'download_wniosek' 1 %}" onclick="" class=""><h3>PJ</h3></a>
+    </div>
+
+
+</div>
+
+
+{% endblock %}

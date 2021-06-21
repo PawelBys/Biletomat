@@ -17,7 +17,8 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import include, path
 
-from generator.views import home_view, panel, generuj, info, rozkaz, record_delete, save_changes, wnioski
+from generator.views import home_view, panel, generuj, info, rozkaz, record_delete, save_changes, wnioski, \
+    baza_wnioskow, download_wniosek
 from generator.my_auth.login_user import my_login
 from generator.my_auth.register_user import my_register
 from generator.my_auth.logout_user import my_logout
@@ -43,6 +44,8 @@ urlpatterns = [
     path('login/', my_login, name='login'),
     path('register/', my_register, name='register'),
     path('logout/', my_logout, name='logout'),
+    path('baza_wnioskow/', baza_wnioskow, name='baza_wnioskow'),
+    path(r'^download_wniosek/(?P<id>[0-9]+)/$', download_wniosek, name='download_wniosek'),
     path('wnioski/hdk/', generuj_wniosek_hdk, name='hdk'),
     path('wnioski/pj/', generuj_wniosek_pj, name='pj'),
     path('wnioski/nagrodowy/', generuj_wniosek_nagrodowy, name='nagrodowy'),

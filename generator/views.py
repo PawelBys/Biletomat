@@ -123,7 +123,29 @@ def rozkaz(request):
 
 
 def wnioski(request):
-
-
-
     return render(request, "wniosek.html")
+
+def download_wniosek(request, id):
+    THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+
+    if id == "1":
+        document = os.path.join(THIS_FOLDER, 'wnioski\pj.docx')
+    if id == "2":
+        document = os.path.join(THIS_FOLDER, 'wnioski\hdk.docx')
+    if id == "3":
+        document = os.path.join(THIS_FOLDER, r'wnioski\nagrodowy.docx')
+
+    response = HttpResponse(open(document, 'rb').read())
+    response['Content-Type'] = 'text/plain'
+
+    if id == "1":
+        response['Content-Disposition'] = 'attachment; filename = wniosek_pj.docx'
+    if id == "2":
+        response['Content-Disposition'] = 'attachment; filename = wniosek_hdk.docx'
+    if id == "3":
+        response['Content-Disposition'] = 'attachment; filename = wniosek_nagrodowy.docx'
+    return response
+
+def baza_wnioskow(request):
+
+    return render(request, "baza_wnioskow.html")
