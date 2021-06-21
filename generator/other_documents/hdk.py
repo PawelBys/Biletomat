@@ -44,6 +44,7 @@ def generuj_wniosek_hdk(request):
             pluton = this_user.userprofile.pluton
             grupa = this_user.userprofile.grupa
 
+            typ_donacji = typ_donacji.capitalize()
 
             context ={
                 'stopien':stopien,
