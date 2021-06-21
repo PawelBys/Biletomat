@@ -134,7 +134,8 @@ def download_wniosek(request, id):
         document = os.path.join(THIS_FOLDER, 'wnioski\hdk.docx')
     if id == "3":
         document = os.path.join(THIS_FOLDER, r'wnioski\nagrodowy.docx')
-
+    if id == "4":
+        document = os.path.join(THIS_FOLDER, r'wnioski\informacja.docx')
     response = HttpResponse(open(document, 'rb').read())
     response['Content-Type'] = 'text/plain'
 
@@ -144,6 +145,8 @@ def download_wniosek(request, id):
         response['Content-Disposition'] = 'attachment; filename = wniosek_hdk.docx'
     if id == "3":
         response['Content-Disposition'] = 'attachment; filename = wniosek_nagrodowy.docx'
+    if id == "4":
+        response['Content-Disposition'] = 'attachment; filename = informacja.docx'
     return response
 
 def baza_wnioskow(request):
