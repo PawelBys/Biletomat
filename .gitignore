@@ -1,2 +1,3 @@
 venv/
 db.sqlite3
+generator/generated_doc.docx

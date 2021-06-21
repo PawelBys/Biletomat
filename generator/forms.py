@@ -120,22 +120,23 @@ class WniosekForm(forms.Form):
     miejscowosc = forms.CharField(max_length=30, label="Miasto",
                                   widget=forms.TextInput(attrs={'class': 'normal'}), required=True,
                                   help_text="Na przepustkę/urlop udam się do miejscowości:")
-    motywacja = forms.CharField(max_length=200, label="Motywacja",
-                                widget=forms.TextInput(attrs={'class': 'normal'}),
-                                help_text="Dokończ zdanie (bez kropki na końcu)",
-                                initial="Wniosek swój motywuję ", required=True)
+
     zaleglosci = forms.CharField(max_length=200, label="Zaległości",
                                  widget=forms.TextInput(attrs={'class': 'normal'}),
-                                 help_text="nie posiadam zaległości w nauce/posiadam zaległości:... (wymień)(bez kropki na końcu)",
+                                 help_text="nie posiadam zaległości w nauce/posiadam np. 2 zaległości z... (wymień)(bez kropki na końcu)",
                                  initial="nie posiadam zaległości w nauce", required=True)
     kary = forms.CharField(max_length=200, label="Kary dyscyplinarne",
                            widget=forms.TextInput(attrs={'class': 'normal'}),
-                           help_text="nie posiadam kar dyscyplinarnych/posiadam kary:...(wymień)(bez kropki na końcu)",
+                           help_text="nie posiadam kar dyscyplinarnych/posiadam np. 1 karę dyscyplinarną za...(wymień)(bez kropki na końcu)",
                            initial="nie posiadam kar dyscyplinarnych", required=True)
 
 class HdkForm(WniosekForm):
-
+    DONACJE = ( ('krew pełną','krew pełna'),('płytki krwi','płytki krwi'),('osocze','osocze')  )
+    ZALACZNIKI = ( ('Zaświadczenie o oddaniu krwi','Zaświadczenie o oddaniu krwi'),('skan legitymacji Honorowego Dawcy Krwi ','legitymacja HDK'))
     data_oddania = forms.DateField(widget=DateInput, initial=date.today(), label="Data oddania krwi", required=True)
+    typ_donacji = forms.CharField(widget=forms.Select(choices=DONACJE, attrs={'class': 'normal'}))
+    wielkosc_donacji = forms.IntegerField(label="Wielkość donacji", required=True, widget=forms.NumberInput(attrs={'class':'normal'}), help_text='Wielkość donacji w ml')
+    zalacznik = forms.CharField(widget=forms.Select(choices=ZALACZNIKI, attrs={'class': 'normal'}))
 
 
 class NagrodowyForm(WniosekForm):
@@ -144,3 +145,9 @@ class NagrodowyForm(WniosekForm):
                                   help_text="Nr rozkazu w którym udzielony był urlop nagrodowy (np. 19/2021)")
     data_rozkazu = forms.DateField(widget=DateInput, initial=date.today(), label="Dzień wydania rozkazu",
                                     help_text="Dzień wydania rozkazu w którym udzielony był urlop nagrodowy",required=True)
+
+class PjForm (WniosekForm):
+    motywacja = forms.CharField(max_length=200, label="Motywacja",
+                                widget=forms.TextInput(attrs={'class': 'normal'}),
+                                help_text="Dokończ zdanie (bez kropki na końcu)",
+                                initial="Wniosek swój motywuję ", required=True)

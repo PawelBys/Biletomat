@@ -8,7 +8,7 @@ from django.utils import formats
 from docxtpl import DocxTemplate
 
 from generator.date_format import get_date
-from generator.forms import HdkForm, WniosekForm
+from generator.forms import HdkForm, WniosekForm, PjForm
 
 
 def generuj_wniosek_pj(request):
@@ -17,9 +17,9 @@ def generuj_wniosek_pj(request):
 
     generated_pj = os.path.join(THIS_FOLDER, 'generated_pj.docx')
 
-    form=WniosekForm()
+    form=PjForm()
     if request.method == "POST":
-        form = WniosekForm(request.POST)
+        form = PjForm(request.POST)
         if form.is_valid():
 
             data_poczatku = form.cleaned_data.get('data_poczatku')

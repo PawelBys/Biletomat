@@ -30,8 +30,10 @@ def generuj_wniosek_hdk(request):
             miejscowosc =form.cleaned_data.get('miejscowosc')
             motywacja =form.cleaned_data.get('motywacja')
             zaleglosci =form.cleaned_data.get('zaleglosci')
-            kary =form.cleaned_data.get('kary')
-
+            kary = form.cleaned_data.get('kary')
+            typ_donacji = form.cleaned_data.get('typ_donacji')
+            wielkosc_donacji = form.cleaned_data.get('wielkosc_donacji')
+            zalacznik = form.cleaned_data.get('zalacznik')
 
 
             this_user = User.objects.get(id=request.user.id)
@@ -57,6 +59,9 @@ def generuj_wniosek_hdk(request):
                 "motywacja":motywacja,
                 'zaleglosci':zaleglosci,
                 'kary':kary,
+                'typ_donacji':typ_donacji,
+                'wielkosc_donacji':wielkosc_donacji,
+                'zalacznik':zalacznik,
 
             }
             doc = DocxTemplate(open(sample_hdk, "rb"))
