@@ -60,7 +60,7 @@ def generuj_wniosek_hdk(request):
                 "motywacja":motywacja,
                 'zaleglosci':zaleglosci,
                 'kary':kary,
-                'typ_donacji':typ_donacji,
+                'typ_donacji':typ_donacji.capitalize(),
                 'wielkosc_donacji':wielkosc_donacji,
                 'zalacznik':zalacznik,
 
