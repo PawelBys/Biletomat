@@ -129,13 +129,13 @@ def download_wniosek(request, id):
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
     if id == "1":
-        document = os.path.join(THIS_FOLDER, 'wnioski\pj.docx')
+        document = os.path.join(THIS_FOLDER, 'wnioski/pj.docx')
     if id == "2":
-        document = os.path.join(THIS_FOLDER, 'wnioski\hdk.docx')
+        document = os.path.join(THIS_FOLDER, 'wnioski/hdk.docx')
     if id == "3":
-        document = os.path.join(THIS_FOLDER, r'wnioski\nagrodowy.docx')
+        document = os.path.join(THIS_FOLDER, r'wnioski/nagrodowy.docx')
     if id == "4":
-        document = os.path.join(THIS_FOLDER, r'wnioski\informacja.docx')
+        document = os.path.join(THIS_FOLDER, 'wnioski/informacja.docx')
     response = HttpResponse(open(document, 'rb').read())
     response['Content-Type'] = 'text/plain'
 
