@@ -25,9 +25,11 @@ from .generate_request import generuj_ext, generuj_rozkaz
 
 
 def home_view(request, *args, **kwargs):
+    page_title = 'Aplikacja biletowa'
     context = {
         'data' : settings.DATA_GRANICZNA.strftime("%d.%m.%Y"),
-        'fontColor': os.getenv('FONT_COLOR')
+        'fontColor': os.getenv('FONT_COLOR'),
+        'page_title':page_title
     }
 
     # jesli uzytkownik jest zalogowany, to wyswietl normalna strone
@@ -36,6 +38,7 @@ def home_view(request, *args, **kwargs):
 
 
 def generuj(request):
+    page_title = 'Zwrot kosztów dojazdu'
     form = BiletForm()
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -62,7 +65,8 @@ def generuj(request):
     context = {
         "form": form,
         'fontColor': os.getenv('FONT_COLOR'),
-        'typ_wniosku': 'Wniosek o zwrot kosztów przejazu'
+        'typ_wniosku': 'Wniosek o zwrot kosztów przejazu',
+        'page_title':page_title
     }
     if date.today() > data and not request.user.is_authenticated:
         return render(request, "no_permission.html")
@@ -71,9 +75,10 @@ def generuj(request):
 
 
 def info(request, *args, **kwargs):
-
+    page_title = 'Informacje'
     context = {
-        'fontColor': os.getenv('FONT_COLOR')
+        'fontColor': os.getenv('FONT_COLOR'),
+        'page_title':page_title
     }
     return render(request, "info.html", context)
 
@@ -98,6 +103,7 @@ def save_changes(request, id):
 
 # funkcja odpowiedzialna za widok administratora
 def panel(request, *args, **kwargs):
+    page_title= 'Panel admina'
     queryset1 = Dane.objects.filter(typ = 'przepustkę jednorazową').order_by('nr_rozkazu', 'nazwisko')
     ordered_queryset1 = queryset1
     queryset2 = Dane.objects.filter(typ = 'urlop').order_by('data_wyjazdu', 'nazwisko')
@@ -105,7 +111,8 @@ def panel(request, *args, **kwargs):
     context = {
         "lista": queryset1,
         "lista2":queryset2,
-        'fontColor': os.getenv('FONT_COLOR')
+        'fontColor': os.getenv('FONT_COLOR'),
+        'page_title':page_title
     }
     if request.user.is_superuser:
         return render(request, "panel.html", context)
@@ -123,7 +130,11 @@ def rozkaz(request):
 
 
 def wnioski(request):
-    return render(request, "wniosek.html")
+    page_title = 'Generator wniosków'
+    context = {
+        'page_title':page_title
+    }
+    return render(request, "wniosek.html", context)
 
 def download_wniosek(request, id):
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
@@ -150,5 +161,8 @@ def download_wniosek(request, id):
     return response
 
 def baza_wnioskow(request):
-
-    return render(request, "baza_wnioskow.html")
+    page_title = 'Baza wniosków'
+    context = {
+            'page_title':page_title
+    }
+    return render(request, "baza_wnioskow.html", context)
