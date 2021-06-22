@@ -121,11 +121,11 @@ class WniosekForm(forms.Form):
                                   widget=forms.TextInput(attrs={'class': 'normal'}), required=True,
                                   help_text="Na przepustkę/urlop udam się do miejscowości:")
 
-    zaleglosci = forms.CharField(max_length=200, label="Zaległości",
+    zaleglosci = forms.CharField(max_length=500, label="Zaległości",
                                  widget=forms.TextInput(attrs={'class': 'normal'}),
                                  help_text="nie posiadam zaległości w nauce/posiadam np. 2 zaległości z... (wymień)(bez kropki na końcu)",
                                  initial="nie posiadam zaległości w nauce", required=True)
-    kary = forms.CharField(max_length=200, label="Kary dyscyplinarne",
+    kary = forms.CharField(max_length=500, label="Kary dyscyplinarne",
                            widget=forms.TextInput(attrs={'class': 'normal'}),
                            help_text="nie posiadam kar dyscyplinarnych/posiadam np. 1 karę dyscyplinarną za...(wymień)(bez kropki na końcu)",
                            initial="nie posiadam kar dyscyplinarnych", required=True)
@@ -147,7 +147,7 @@ class NagrodowyForm(WniosekForm):
                                     help_text="Dzień wydania rozkazu w którym udzielony był urlop nagrodowy",required=True)
 
 class PjForm (WniosekForm):
-    motywacja = forms.CharField(max_length=200, label="Motywacja",
+    motywacja = forms.CharField(max_length=500, label="Motywacja",
                                 widget=forms.TextInput(attrs={'class': 'normal'}),
                                 help_text="Dokończ zdanie (bez kropki na końcu)",
                                 initial="Wniosek swój motywuję ", required=True)
