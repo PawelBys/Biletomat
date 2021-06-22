@@ -47,7 +47,7 @@ def generuj_wniosek_pj(request):
                 'nazwisko': nazwisko,
                 'pluton': pluton,
                 'grupa':grupa,
-                'data':str(date.today()),
+                'data':formats.date_format(date.today(),'d.m.Y'),
                 'data_urlopu':data_urlopu,
                 'miejscowosc':miejscowosc,
                 "motywacja":motywacja,
