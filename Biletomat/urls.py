@@ -22,7 +22,6 @@ from generator.views import home_view, panel, generuj, info, rozkaz, record_dele
 from generator.my_auth.login_user import my_login
 from generator.my_auth.register_user import my_register
 from generator.my_auth.logout_user import my_logout
-from generator.font_color_changer import change_font_color
 from generator.other_documents.hdk import generuj_wniosek_hdk
 from generator.other_documents.pj import generuj_wniosek_pj
 from generator.other_documents.nagrodowy import generuj_wniosek_nagrodowy
@@ -49,7 +48,6 @@ urlpatterns = [
     path('wnioski/hdk/', generuj_wniosek_hdk, name='hdk'),
     path('wnioski/pj/', generuj_wniosek_pj, name='pj'),
     path('wnioski/nagrodowy/', generuj_wniosek_nagrodowy, name='nagrodowy'),
-    path('change_font_color/', change_font_color, name='change_font_color'),
     url(r'^delete/(?P<id>[0-9]+)/$', record_delete , name='record_delete'),
     url(r'^save/(?P<id>[0-9]+)/$', save_changes, name='save_changes'),
 

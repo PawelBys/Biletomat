@@ -76,12 +76,6 @@ text-decoration: none;
     <a href="/register" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Zarejestruj</a>
     {% endif %}
 
-
-  <form action="{% url 'change_font_color' %}" method="post">
-            {% csrf_token %}
-      <input type="hidden" name="path_to_return" value= "{{ request.path }}">
-            <input type="submit" class="w3-bar-item w3-button w3-hover-black" value="Zmień kolor czcionki">
-  </form>
     </div>
 </nav>
 
