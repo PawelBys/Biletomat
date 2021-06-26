@@ -48,8 +48,7 @@ text-decoration: none;
 
 
 
-    <a href="/info" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">FAQ</a>
-    <a href="/baza_wnioskow" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Wnioski do pobrania</a>
+
 
     {% if user.is_authenticated %}
     <a href="/generuj/" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Zwrot kosztów dojazdu</a>
@@ -60,11 +59,10 @@ text-decoration: none;
     <a href="/admin" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Ustawienia</a>
     {% endif %}
 
-
-
     {% endif %}
 
-
+     <a href="/info" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">FAQ</a>
+     <a href="/baza_wnioskow" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Wnioski do pobrania</a>
 
 
   </div>
