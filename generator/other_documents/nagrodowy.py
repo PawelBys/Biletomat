@@ -53,7 +53,7 @@ def generuj_wniosek_nagrodowy(request):
                 'grupa':grupa,
                 'data':str(date.today()),
                 'data_urlopu':data_urlopu,
-                'data_rozkazu':formats.date_format(data_rozkazu,"dd.mm.yyyy"),
+                'data_rozkazu':formats.date_format(data_rozkazu,"d.m.Y"),
                 'nr_rozkazu':nr_rozkazu,
                 'miejscowosc':miejscowosc,
                 "motywacja":motywacja,
