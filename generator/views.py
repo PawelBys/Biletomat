@@ -25,7 +25,7 @@ from .generate_request import generuj_ext, generuj_rozkaz
 
 
 def home_view(request, *args, **kwargs):
-    page_title = 'Aplikacja biletowa'
+    page_title = 'Generator wniosków'
     context = {
         'data' : settings.DATA_GRANICZNA.strftime("%d.%m.%Y"),
         'fontColor': os.getenv('FONT_COLOR'),
@@ -68,7 +68,7 @@ def generuj(request):
         'typ_wniosku': 'Wniosek o zwrot kosztów przejazu',
         'page_title':page_title
     }
-    if date.today() > data and not request.user.is_authenticated:
+    if date.today() > data or not request.user.is_authenticated:
         return render(request, "no_permission.html")
     else:
         return render(request, "generate.html", context)
