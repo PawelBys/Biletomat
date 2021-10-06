@@ -49,8 +49,11 @@ PJ:
         <td> {{ q.miesiac }} </td>
         <td> {{ q.data_wyjazdu }} </td>
         <td> {{ q.data_powrotu }} </td>
-        <td> {{ q.miasto }} </td>
-
+        {% if q.miasto == "Warszawa" %}
+            <td bgcolor="red"> {{ q.miasto }} </td>
+        {% else %}
+            <td> {{ q.miasto }} </td>
+        {% endif %}
         <td>
             <form action="{% url 'record_delete' q.id %}" method="post">
                 {% csrf_token %}

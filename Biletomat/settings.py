@@ -16,7 +16,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 #BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-DATA_GRANICZNA = date(2021, 10, 5)
+DATA_GRANICZNA = date(2021, 10, 6)
 
 FONT_COLOR = "black"
 #cos

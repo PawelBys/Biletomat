@@ -51,7 +51,7 @@ class BiletForm(forms.Form):
     data_wyjazdu = forms.DateField(widget=DateInput, initial=date.today(), label="Data rozpoczęcia PJ/urlopu", help_text="Data rozpoczęcia urlopu/PJ z blankietu, nie fizycznego wyjazdu (zazwyczaj wyjeżdża się dzień wcześniej)" )
     data_powrotu = forms.DateField(widget=DateInput, initial=date.today(), label="Data końca PJ/urlopu")
     tam_z_powrotem = forms.CharField(widget=forms.Select(choices=TAM, attrs={'class':'normal'}), required=False, label="W jedną / w dwie strony", )
-    miasto = forms.CharField(max_length=30, label="Miasto podróży (z biletu)", widget=forms.TextInput(attrs={'class':'normal'}))
+    miasto = forms.CharField(max_length=30, label="Miasto podróży (z biletu):", widget=forms.TextInput(attrs={'class':'normal'}), help_text="NIE WPISYWAĆ WARSZAWA")
     miesiac = forms.CharField(widget=forms.Select(choices=MIESIACE, attrs={'class':'normal'}), label="Miesiąc", help_text="Miesiąc za jaki chcesz otrzymać należność")
     typ_pociagu = forms.MultipleChoiceField(choices=POCIAGI, widget=forms.CheckboxSelectMultiple(attrs={'class':'xxx'}), required=False, label="Typ pociągu")
     typ_autobusu = forms.MultipleChoiceField(choices=AUTOBUSY, widget=forms.CheckboxSelectMultiple(attrs={'class':'czekbox'}), required=False)
