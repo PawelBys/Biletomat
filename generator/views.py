@@ -68,9 +68,8 @@ def generuj(request):
         'typ_wniosku': 'Wniosek o zwrot kosztów przejazu',
         'page_title':page_title
     }
-    if request.user.is_superuser:
-        return render(request, "generate.html", context)
-    if date.today() > data or not request.user.is_authenticated:
+
+    if not request.user.is_authenticated:
         return render(request, "no_permission.html")
     else:
         return render(request, "generate.html", context)
