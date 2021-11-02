@@ -68,6 +68,7 @@ text-decoration: none;
   </div>
     <div  id="login_section">
     {% if user.is_authenticated %}
+    <a href="/update" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Zmień swoje dane</a>
     <a href="/logout" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Wyloguj</a>
     {% else %}
     <a href="/login" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Zaloguj</a>

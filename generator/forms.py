@@ -48,8 +48,8 @@ class BiletForm(forms.Form):
     # pluton = forms.CharField(widget=forms.Select(choices=PLUTONY, attrs={'class':'normal'}))
     #data_wyjazdu = forms.DateField(widget=DateInput(attrs={'class':'data'}), initial=date.today(), help_text="Data z blankietu (np. sobota, nie piątek)")
     #data_powrotu = forms.DateField( widget=DateInput(attrs={'class':'data'}), initial=date.today())
-    data_wyjazdu = forms.DateField(widget=DateInput, initial=date.today(), label="Data rozpoczęcia PJ/urlopu", help_text="Data rozpoczęcia urlopu/PJ z blankietu, nie fizycznego wyjazdu (zazwyczaj wyjeżdża się dzień wcześniej)" )
-    data_powrotu = forms.DateField(widget=DateInput, initial=date.today(), label="Data końca PJ/urlopu")
+    data_wyjazdu = forms.DateField(widget=DateInput, initial=date.today(), label="Data rozpoczęcia PJ/urlopu", help_text="Data rozpoczęcia urlopu/PJ z ROZKAZU, nie fizycznego wyjazdu (zazwyczaj wyjeżdża się dzień wcześniej)" )
+    data_powrotu = forms.DateField(widget=DateInput, initial=date.today(), label="Data końca PJ/urlopu z ROZKAZU")
     tam_z_powrotem = forms.CharField(widget=forms.Select(choices=TAM, attrs={'class':'normal'}), required=False, label="W jedną / w dwie strony", )
     miasto = forms.CharField(max_length=30, label="Miasto podróży (z biletu):", widget=forms.TextInput(attrs={'class':'normal'}), help_text="NIE WPISYWAĆ WARSZAWA")
     miesiac = forms.CharField(widget=forms.Select(choices=MIESIACE, attrs={'class':'normal'}), label="Miesiąc", help_text="Miesiąc za jaki chcesz otrzymać należność")
@@ -113,6 +113,26 @@ class RegisterForm(UserCreationForm):
         userProfile.save()
         return user
 
+
+class UpdateForm(forms.ModelForm):
+    class Meta:
+        model=UserProfile
+        fields=('imie', 'nazwisko', 'stopien', 'adres', 'pluton', 'wydzial', 'grupa' )
+    STOPNIE = (
+        ('szer. pchor.', 'szer. pchor.'), ('st. szer. pchor.', 'st. szer. pchor.'), ('kpr. pchor.', 'kpr. pchor.'),
+        ('st. kpr. pchor.', 'st. kpr. pchor.'), ('plut. pchor.', 'plut. pchor.'), ('sierż. pchor.', 'sierż. pchor.'))
+    PLUTONY = ((1, 1), (2, 2), (3, 3), (4, 4), (5, 5))
+    WYDZIALY = (
+    ('WCY', 'WCY'), ('WIG', 'WIG'), ('WTC', 'WTC'), ('WEL', 'WEL'), ('WIM', 'WIM'), ('WML', 'WML'), ('WLO', 'WLO'),)
+
+    # imie = forms.CharField(max_length=50, label="Imię", widget=forms.TextInput(attrs={'class': 'normal'}))
+    # nazwisko = forms.CharField(max_length=50, label="Nazwisko", widget=forms.TextInput(attrs={'class': 'normal'}))
+    stopien = forms.CharField(widget=forms.Select(choices=STOPNIE, attrs={'class': 'normal'}), label="Stopień")
+    # adres = forms.CharField(max_length=100, initial='', help_text="WZÓR: ul. Kolejowa 7/23, 01-476 Warszawa",
+    #                         widget=forms.TextInput(attrs={'class': 'normal'}))
+    pluton = forms.CharField(widget=forms.Select(choices=PLUTONY, attrs={'class': 'normal'}))
+    wydzial = forms.CharField(widget=forms.Select(choices=WYDZIALY, attrs={'class': 'normal'}), label="Wydział")
+    # grupa = forms.CharField(max_length=50, label="Grupa", widget=forms.TextInput(attrs={'class': 'normal'}))
 
 class WniosekForm(forms.Form):
     data_poczatku = forms.DateField(widget=DateInput, initial=date.today(), label="Data początku pj/urlopu", required=True)

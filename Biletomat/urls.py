@@ -22,6 +22,7 @@ from generator.views import home_view, panel, generuj, info, rozkaz, record_dele
 from generator.my_auth.login_user import my_login
 from generator.my_auth.register_user import my_register
 from generator.my_auth.logout_user import my_logout
+from generator.my_auth.update_user import my_update
 from generator.other_documents.hdk import generuj_wniosek_hdk
 from generator.other_documents.pj import generuj_wniosek_pj
 from generator.other_documents.nagrodowy import generuj_wniosek_nagrodowy
@@ -43,6 +44,7 @@ urlpatterns = [
     path('login/', my_login, name='login'),
     path('register/', my_register, name='register'),
     path('logout/', my_logout, name='logout'),
+    path('update/', my_update, name='update'),
     path('baza_wnioskow/', baza_wnioskow, name='baza_wnioskow'),
     path(r'^download_wniosek/(?P<id>[0-9]+)/$', download_wniosek, name='download_wniosek'),
     path('wnioski/hdk/', generuj_wniosek_hdk, name='hdk'),

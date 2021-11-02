@@ -1,5 +1,6 @@
 import os
 
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 
@@ -22,6 +23,7 @@ def my_login(request):
                     login(request, user)
                     return response
                 else:
+                    messages.info(request, 'Nieprawidłowe hasło!')
                     return render(request, "login.html", {'form': LoginForm(request.POST), 'fontColor': os.getenv('FONT_COLOR')})
                 return
             else:
