@@ -19,6 +19,6 @@ def my_update(request):
             response = redirect('./')
             return response
     else:
-        form = UpdateForm(instance=updatedUserprofile)
+        form = UpdateForm(instance=updatedUserprofile, initial={'email':request.user.email})
 
     return render(request, 'update.html', {"form":form})

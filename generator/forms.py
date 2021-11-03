@@ -128,7 +128,7 @@ class UpdateForm(forms.ModelForm):
     ('WCY', 'WCY'), ('WIG', 'WIG'), ('WTC', 'WTC'), ('WEL', 'WEL'), ('WIM', 'WIM'), ('WML', 'WML'), ('WLO', 'WLO'),)
 
     # email = fields.EmailField(_('email address'))
-    email = models.EmailField(max_length=100)
+    email = forms.EmailField(max_length=100)
 
     # imie = forms.CharField(max_length=50, label="Imię", widget=forms.TextInput(attrs={'class': 'normal'}))
     # nazwisko = forms.CharField(max_length=50, label="Nazwisko", widget=forms.TextInput(attrs={'class': 'normal'}))
