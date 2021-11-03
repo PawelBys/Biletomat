@@ -17,6 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import include, path
 
+from generator.my_auth.password_reset import password_reset_request
 from generator.views import home_view, panel, generuj, info, rozkaz, record_delete, save_changes, wnioski, \
     baza_wnioskow, download_wniosek
 from generator.my_auth.login_user import my_login
@@ -26,6 +27,7 @@ from generator.my_auth.update_user import my_update
 from generator.other_documents.hdk import generuj_wniosek_hdk
 from generator.other_documents.pj import generuj_wniosek_pj
 from generator.other_documents.nagrodowy import generuj_wniosek_nagrodowy
+from django.contrib.auth import views as auth_views
 
 # tutaj dodaje się kolejne "widoki" - podstrony, trzeba je mieć w pliku views jako funkcję
 
@@ -52,5 +54,13 @@ urlpatterns = [
     path('wnioski/nagrodowy/', generuj_wniosek_nagrodowy, name='nagrodowy'),
     url(r'^delete/(?P<id>[0-9]+)/$', record_delete , name='record_delete'),
     url(r'^save/(?P<id>[0-9]+)/$', save_changes, name='save_changes'),
+
+    path('reset/<uidb64>/<token>/',
+         auth_views.PasswordResetConfirmView.as_view(template_name="password/password_reset_confirm.html"),
+         name='password_reset_confirm'),
+    path('reset/done/',
+         auth_views.PasswordResetCompleteView.as_view(template_name='password/password_reset_complete.html'),
+         name='password_reset_complete'),
+    path("password_reset/", password_reset_request, name="password/password_reset"),
 
 ]

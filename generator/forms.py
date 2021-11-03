@@ -1,13 +1,15 @@
 from datetime import date, timedelta
 #from importlib._common import _
+from importlib._common import _
 
 from django import forms
 from django.contrib.auth import password_validation
 from django.contrib.auth.forms import UserCreationForm, UsernameField
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.db.models import fields
 from django.forms import DateInput
-
+from django.db import models
 from generator.models import UserProfile
 
 
@@ -63,6 +65,11 @@ class LoginForm(forms.Form):
     password = forms.CharField(max_length=50, label="Hasło", widget=forms.PasswordInput)
 
 class RegisterForm(UserCreationForm):
+
+    class Meta:
+        model = User
+        fields = ("username",'email')
+
     STOPNIE = (
     ('szer. pchor.', 'szer. pchor.'), ('st. szer. pchor.', 'st. szer. pchor.'), ('kpr. pchor.', 'kpr. pchor.'),
     ('st. kpr. pchor.', 'st. kpr. pchor.'), ('plut. pchor.', 'plut. pchor.'), ('sierż. pchor.', 'sierż. pchor.'))
@@ -78,11 +85,6 @@ class RegisterForm(UserCreationForm):
     pluton = forms.CharField(widget=forms.Select(choices=PLUTONY, attrs={'class': 'normal'}))
     wydzial = forms.CharField(widget=forms.Select(choices=WYDZIALY, attrs={'class': 'normal'}), label="Wydział")
     grupa = forms.CharField(max_length=50, label="Grupa", widget=forms.TextInput(attrs={'class': 'normal'}))
-
-
-    class Meta:
-        model = User
-        fields = ("username",)
 
 
 
@@ -124,6 +126,9 @@ class UpdateForm(forms.ModelForm):
     PLUTONY = ((1, 1), (2, 2), (3, 3), (4, 4), (5, 5))
     WYDZIALY = (
     ('WCY', 'WCY'), ('WIG', 'WIG'), ('WTC', 'WTC'), ('WEL', 'WEL'), ('WIM', 'WIM'), ('WML', 'WML'), ('WLO', 'WLO'),)
+
+    # email = fields.EmailField(_('email address'))
+    email = models.EmailField(max_length=100)
 
     # imie = forms.CharField(max_length=50, label="Imię", widget=forms.TextInput(attrs={'class': 'normal'}))
     # nazwisko = forms.CharField(max_length=50, label="Nazwisko", widget=forms.TextInput(attrs={'class': 'normal'}))
