@@ -18,7 +18,23 @@
     {% endif %}
 
     <table >
-    {% for field in form.visible_fields %}
+
+    {% for field in userForm.visible_fields %}
+      <tr style="vertical-align:middle">
+        <th style="text-align:right">{{ field.label_tag }}</th>
+        <td style="padding:5px">
+
+          {{ field }}
+          <span style="color:red;">{{ field.errors }}</span>
+
+          <br>
+          <span style="font-size:12px">{{ field.help_text  }}</span>
+        </td>
+      </tr>
+    {% endfor %}
+
+
+    {% for field in profileUpdateForm.visible_fields %}
       <tr style="vertical-align:middle">
         <th style="text-align:right">{{ field.label_tag }}</th>
         <td style="padding:5px">

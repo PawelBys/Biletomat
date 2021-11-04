@@ -34,24 +34,29 @@ class BiletForm(forms.Form):
 
     def clean(self):
         cleaned_data = self.cleaned_data
-        end_date = cleaned_data.get('data_przyjazdu')
+        end_date = cleaned_data.get('data_powrotu')
         start_date = cleaned_data.get('data_wyjazdu')
+        typ_pociagu = cleaned_data.get('typ_pociagu')
+        typ_autobusu = cleaned_data.get('typ_autobusu')
+        typ = cleaned_data.get('typ')
+        print(typ)
+        PJ72 = cleaned_data.get('PJ72')
+        roznica_dni = end_date-start_date
         if end_date and start_date:
             if end_date < start_date:
-                self.add_error('data_przyjazdu', 'Event end date should not occur before start date.')
+                self.add_error('data_powrotu', 'Data powrotu nie może być przed datą wyjazdu.')
+        if len(typ_pociagu)==0 and len(typ_autobusu)==0:
+            self.add_error('typ_autobusu', 'Wybierz środek transportu.')
+
+        if roznica_dni.days >= 2 and not PJ72 and typ=='przepustkę jednorazową':
+            self.add_error('PJ72', 'Upewnij się, czy to była PJ 72?')
         return cleaned_data
 
 
     typ = forms.CharField(widget=forms.Select(choices=TYP, attrs={'class':'normal'}))
-    # imie = forms.CharField(max_length=50, label="Imię", widget=forms.TextInput(attrs={'class':'normal'})  )
-    # nazwisko = forms.CharField(max_length=50, label="Nazwisko", widget=forms.TextInput(attrs={'class':'normal'}))
-    # stopien = forms.CharField(widget=forms.Select(choices=STOPNIE, attrs={'class':'normal'}), label="Stopień")
-    # adres = forms.CharField(max_length=100, initial='', help_text="WZÓR: ul. Kolejowa 7/23, 01-476 Warszawa", widget=forms.TextInput(attrs={'class':'normal'}))
-    # pluton = forms.CharField(widget=forms.Select(choices=PLUTONY, attrs={'class':'normal'}))
-    #data_wyjazdu = forms.DateField(widget=DateInput(attrs={'class':'data'}), initial=date.today(), help_text="Data z blankietu (np. sobota, nie piątek)")
-    #data_powrotu = forms.DateField( widget=DateInput(attrs={'class':'data'}), initial=date.today())
+    PJ72 = forms.BooleanField(help_text="Zaznacz jeśli to była PJ 72h", required=False, label='PJ 72h')
     data_wyjazdu = forms.DateField(widget=DateInput, initial=date.today(), label="Data rozpoczęcia PJ/urlopu", help_text="Data rozpoczęcia urlopu/PJ z ROZKAZU, nie fizycznego wyjazdu (zazwyczaj wyjeżdża się dzień wcześniej)" )
-    data_powrotu = forms.DateField(widget=DateInput, initial=date.today(), label="Data końca PJ/urlopu z ROZKAZU")
+    data_powrotu = forms.DateField(widget=DateInput, initial=date.today(), label="Data końca PJ/urlopu")
     tam_z_powrotem = forms.CharField(widget=forms.Select(choices=TAM, attrs={'class':'normal'}), required=False, label="W jedną / w dwie strony", )
     miasto = forms.CharField(max_length=30, label="Miasto podróży (z biletu):", widget=forms.TextInput(attrs={'class':'normal'}), help_text="NIE WPISYWAĆ WARSZAWA")
     miesiac = forms.CharField(widget=forms.Select(choices=MIESIACE, attrs={'class':'normal'}), label="Miesiąc", help_text="Miesiąc za jaki chcesz otrzymać należność")
@@ -116,7 +121,7 @@ class RegisterForm(UserCreationForm):
         return user
 
 
-class UpdateForm(forms.ModelForm):
+class UpdateProfileForm(forms.ModelForm):
     class Meta:
         model=UserProfile
         fields=('imie', 'nazwisko', 'stopien', 'adres', 'pluton', 'wydzial', 'grupa' )
@@ -128,7 +133,7 @@ class UpdateForm(forms.ModelForm):
     ('WCY', 'WCY'), ('WIG', 'WIG'), ('WTC', 'WTC'), ('WEL', 'WEL'), ('WIM', 'WIM'), ('WML', 'WML'), ('WLO', 'WLO'),)
 
     # email = fields.EmailField(_('email address'))
-    email = forms.EmailField(max_length=100)
+    #email = forms.EmailField(max_length=100)
 
     # imie = forms.CharField(max_length=50, label="Imię", widget=forms.TextInput(attrs={'class': 'normal'}))
     # nazwisko = forms.CharField(max_length=50, label="Nazwisko", widget=forms.TextInput(attrs={'class': 'normal'}))
@@ -138,6 +143,18 @@ class UpdateForm(forms.ModelForm):
     pluton = forms.CharField(widget=forms.Select(choices=PLUTONY, attrs={'class': 'normal'}))
     wydzial = forms.CharField(widget=forms.Select(choices=WYDZIALY, attrs={'class': 'normal'}), label="Wydział")
     # grupa = forms.CharField(max_length=50, label="Grupa", widget=forms.TextInput(attrs={'class': 'normal'}))
+
+class UpdateUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('email', 'username')
+
+    username = forms.CharField(max_length=100,
+                               required=True,
+                               label='Nazwa użytkownika',
+                               widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(required=True,
+                             widget=forms.TextInput(attrs={'class': 'form-control'}))
 
 class WniosekForm(forms.Form):
     data_poczatku = forms.DateField(widget=DateInput, initial=date.today(), label="Data początku pj/urlopu", required=True)
