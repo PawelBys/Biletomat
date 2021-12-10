@@ -11,11 +11,11 @@ class Dane(models.Model):
     imie = models.CharField(max_length=30)
     nazwisko = models.CharField(max_length=30)
     typ = models.CharField(max_length=30)
-    transport = models.CharField(max_length=30)
+    transport = models.CharField(max_length=50)
     miesiac = models.CharField(max_length=30, default='---')
     stopien_id = models.CharField(max_length=10)
-    nr_rozkazu = models.CharField(max_length=10)
-    doniesione = models.CharField(max_length=1, default="")
+    nr_rozkazu = models.CharField(max_length=20, blank=True)
+    doniesione = models.CharField(max_length=1, default="", blank=True)
 # jak cos tu zmienisz to rob manage.py makemigrations i manage.py migrate
 
 class Dane_osobowe (models.Model):

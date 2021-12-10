@@ -104,6 +104,13 @@ def save_changes(request, id):
         object.save()
         return redirect('/panel')
 
+def record_edit(request, id):
+    if request.method == 'POST':
+        path = '/admin/generator/dane/' + id + '/change/'
+        return redirect(path)
+    else:
+        return redirect('/panel')
+
 # funkcja odpowiedzialna za widok administratora
 def panel(request, *args, **kwargs):
     page_title= 'Panel admina'

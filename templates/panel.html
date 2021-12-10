@@ -12,7 +12,7 @@ PJ:
     <tr>
         <th>Doniesione</th>
         <th>Nr</th>
-        <th> T </th>
+
         <th>Stopień</th>
         <th>Imię</th>
         <th>Nazwisko</th>
@@ -20,7 +20,7 @@ PJ:
         <th>Data wyjazdu</th>
         <th>Data powrotu</th>
         <th>Miasto</th>
-
+        <th>Edytuj</th>
         <th>Usuń</th>
     </tr>
     {% for q in lista %}
@@ -37,11 +37,7 @@ PJ:
         </td>
         <td style="text-align:center"> {{ q.nr_rozkazu }}</td>
 
-        {% if q.transport == "" %}
-            <td bgcolor="red">  </td>
-        {% else %}
-            <td bgcolor="green">  </td>
-        {% endif %}
+
 
         <td> {{ q.stopien }}</td>
         <td> {{ q.imie }} </td>
@@ -55,12 +51,19 @@ PJ:
             <td> {{ q.miasto }} </td>
         {% endif %}
         <td>
+            <form action="{% url 'record_edit' q.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Edytuj">
+            </form>
+        </td>
+        <td>
             <form action="{% url 'record_delete' q.id %}" method="post">
                 {% csrf_token %}
                 <input type="submit" value="Usuń">
             </form>
 
         </td>
+
 
 
     </tr>
@@ -73,13 +76,13 @@ Urlop:
     <tr>
         <th>Doniesione</th>
         <th>Nr</th>
-        <th> T </th>
         <th>Stopień</th>
         <th>Imię</th>
         <th>Nazwisko</th>
         <th>Data wyjazdu</th>
         <th>Data powrotu</th>
         <th>Miasto</th>
+        <th>Edytuj</th>
         <th>Usuń</th>
     </tr>
     {% for q in lista2 %}
@@ -96,11 +99,6 @@ Urlop:
         </td>
         <td style="text-align:center"> {{ q.nr_rozkazu }}</td>
 
-        {% if q.transport == "" %}
-            <td bgcolor="red">  </td>
-        {% else %}
-            <td bgcolor="green">  </td>
-        {% endif %}
 
         <td> {{ q.stopien }}</td>
         <td> {{ q.imie }} </td>
@@ -108,6 +106,12 @@ Urlop:
         <td> {{ q.data_wyjazdu }} </td>
         <td> {{ q.data_powrotu }} </td>
         <td> {{ q.miasto }} </td>
+         <td>
+            <form action="{% url 'record_edit' q.id %}" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Edytuj">
+            </form>
+        </td>
         <td>
             <form action="{% url 'record_delete' q.id %}" method="post">
                 {% csrf_token %}
