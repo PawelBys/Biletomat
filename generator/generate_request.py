@@ -146,13 +146,13 @@ def generuj_ext(request, form, generated_doc):
     doc.save(generated_doc)
 
 def generuj_rozkaz(request):
-    query1 = Dane.objects.filter(typ='przepustkę jednorazową', transport='kolejowym w klasie 2, w pociągu ').order_by(
+    query1 = Dane.objects.filter(typ='przepustkę jednorazową', transport__contains='kolejowym w klasie 2').order_by(
         '-stopien_id', 'nazwisko')
-    query2 = Dane.objects.filter(typ='urlop', transport='kolejowym w klasie 2, w pociągu ').order_by('-stopien_id',
+    query2 = Dane.objects.filter(typ='urlop', transport__contains='kolejowym w klasie 2').order_by('-stopien_id',
                                                                                                      'nazwisko')
-    query3 = Dane.objects.filter(typ='przepustkę jednorazową', transport='autobusowym w komunikacji ').order_by(
+    query3 = Dane.objects.filter(typ='przepustkę jednorazową', transport__contains='autobusowym w').order_by(
         '-stopien_id', 'nazwisko')
-    query4 = Dane.objects.filter(typ='urlop', transport='autobusowym w komunikacji ').order_by('-stopien_id',
+    query4 = Dane.objects.filter(typ='urlop', transport__contains='autobusowym w').order_by('-stopien_id',
                                                                                                'nazwisko')
 
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
