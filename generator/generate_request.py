@@ -75,6 +75,9 @@ def generuj_ext(request, form, generated_doc):
         # dnia 24.09.2020 był nr rozkazu 76
         # odejmij datę wyjazdu od 24.09, uzyskane dni pocziel na 7 i pomnóż razy 2 - spodziewana liczba wydanych rozkazow
         nr_rozkazu = 0
+        # 13.01.2022 był 3 rozkaz wydany
+        if(data_rozkazu.year == 2022):
+            nr_rozkazu = int(3 + (((data_rozkazu - date(2022, 1, 13)).days + 1) / 7) * 2)
         if(data_rozkazu.year == 2021):
             nr_rozkazu = int(1 + (((data_rozkazu - date(2021, 1, 5)).days + 1) / 7) * 2)
         if(data_rozkazu.year == 2020):
