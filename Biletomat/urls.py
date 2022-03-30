@@ -19,7 +19,7 @@ from django.urls import include, path
 
 from generator.my_auth.password_reset import password_reset_request
 from generator.views import home_view, panel, generuj, info, rozkaz, record_delete, save_changes, wnioski, \
-    baza_wnioskow, download_wniosek, record_edit, month_save_changes
+    baza_wnioskow, download_wniosek, record_edit, month_save_changes, many_record_delete
 from generator.my_auth.login_user import my_login
 from generator.my_auth.register_user import my_register
 from generator.my_auth.logout_user import my_logout
@@ -53,6 +53,7 @@ urlpatterns = [
     path('wnioski/pj/', generuj_wniosek_pj, name='pj'),
     path('wnioski/nagrodowy/', generuj_wniosek_nagrodowy, name='nagrodowy'),
     url(r'^delete/(?P<id>[0-9]+)/$', record_delete , name='record_delete'),
+    path('delete/selected', many_record_delete, name='many_record_delete'),
     url(r'^save/(?P<id>[0-9]+)/$', save_changes, name='save_changes'),
     url(r'^month_save/(?P<type>[\w-]+)/$', month_save_changes, name='month_save_changes'),
     url(r'^edit/(?P<id>[0-9]+)/$', record_edit, name='record_edit'),

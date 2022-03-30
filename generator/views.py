@@ -92,6 +92,15 @@ def record_delete(request, id):
         object.delete()
         return redirect('/panel')
 
+#funkcja usuwajaca wszystkie zaznaczone rekordy
+def many_record_delete(request):
+    danes_to_delete = Dane.objects.filter(doniesione='X')
+    for dana in danes_to_delete:
+        dana.delete()
+    return redirect('/panel')
+
+
+
 # funkcja odpowiedzialna za zaznaczanie, kto już przyniósł mi wniosek
 def save_changes(request, id):
     object = Dane.objects.get(id=id)
@@ -103,7 +112,7 @@ def save_changes(request, id):
             object.doniesione = "X"
         object.save()
         return redirect('/panel')
-
+# funkcja odpowiedzialna za zaznaczanie wnioskow z calego miesiaca
 def month_save_changes(request, type):
 
     if request.method == "POST":
@@ -113,10 +122,12 @@ def month_save_changes(request, type):
             miesiac = "-" + miesiac + "-"
             if type == 'pj':
                 danes = Dane.objects.filter(data_wyjazdu__contains=miesiac, typ='przepustkę jednorazową')
-            if type == 'urlop':
-                danes = Dane.objects.filter(data_wyjazdu__contains=miesiac, typ='urlop')
+                print(danes)
             else:
-                return redirect('/panel')
+                if type == 'urlop':
+                    danes = Dane.objects.filter(data_wyjazdu__contains=miesiac, typ='urlop')
+                else:
+                    return redirect('/panel')
 
             for dana in danes:
                 if dana.doniesione == "X":

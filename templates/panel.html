@@ -7,14 +7,24 @@
 <p>
     Aktualnie wypełnili formularz:<br>
 
-PJ:
+    <form action="{% url 'many_record_delete' %}" method="post">
+    {% csrf_token %}
+        <input type="submit"  value="Usuń zaznaczone" onclick="return confirm('Czy chcesz usunąć zaznaczone rekordy?');">
+    </form>
+<br>
 
     <form action="{% url 'month_save_changes' 'pj' %}" method="post">
     {% csrf_token %}
         {{ month_save_changes.miesiac }}
-        <input type="submit"  value="Zapisz z wybranego miesiąca">
+        <input type="submit"  value="Zaznacz rekordy">
 
     </form>
+
+
+
+<br>
+
+    PJ:
 
     <table border="1px">
     <tr>
@@ -37,9 +47,9 @@ PJ:
             <form action="{% url 'save_changes' q.id %}" method="post">
                 {% csrf_token %}
                 {% if q.doniesione == 'X' %}
-                    <input type="submit" style="background-color:green;" value="Zapisz">
+                    <input type="submit" style="background-color:green;" value="[ X ]">
                 {% else %}
-                    <input type="submit" value="Zapisz">
+                    <input type="submit" value="[   ]">
                 {% endif %}
             </form>
         </td>
@@ -79,14 +89,17 @@ PJ:
 
 </table>
 <br>
-Urlop:
+
 
 <form action="{% url 'month_save_changes' 'urlop' %}" method="post">
     {% csrf_token %}
         {{ month_save_changes.miesiac }}
-        <input type="submit"  value="Zapisz z wybranego miesiąca">
+        <input type="submit"  value="Zaznacz rekordy">
 
     </form>
+<br>
+
+    Urlop:
 
 <table border="1px">
     <tr>
@@ -107,9 +120,9 @@ Urlop:
             <form action="{% url 'save_changes' q.id %}" method="post">
                 {% csrf_token %}
                 {% if q.doniesione == 'X' %}
-                    <input type="submit" style="background-color:green;" value="Zapisz">
+                    <input type="submit" style="background-color:green;" value="[ X ]">
                 {% else %}
-                    <input type="submit" value="Zapisz">
+                    <input type="submit" value="[   ]">
                 {% endif %}
             </form>
         </td>
