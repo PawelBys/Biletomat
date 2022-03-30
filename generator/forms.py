@@ -193,3 +193,11 @@ class PjForm (WniosekForm):
                                 widget=forms.TextInput(attrs={'class': 'normal'}),
                                 help_text="Dokończ zdanie (bez kropki na końcu)",
                                 initial="Wniosek swój motywuję ", required=True)
+
+class MonthForm (forms.Form):
+    MIESIACE = (
+    ('01', 'styczeń'), ('02', 'luty'), ('03', 'marzec'), ('04', 'kwiecień'), ('05', 'maj'),
+    ('06', 'czerwiec'), ('07', 'lipiec'), ('08', 'sierpień'), ('09', 'wrzesień'),
+    ('10', 'październik'), ('11', 'listopad'), ('12', 'grudzień'))
+
+    miesiac = forms.CharField(widget=forms.Select(choices=MIESIACE, attrs={'class':'normal'}), label="Miesiąc")

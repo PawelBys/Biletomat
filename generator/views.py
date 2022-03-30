@@ -12,7 +12,7 @@ from docx.enum.table import WD_ROW_HEIGHT
 from Biletomat import settings
 from Biletomat.settings import FONT_COLOR
 from generator.models import Dane
-from .forms import BiletForm
+from .forms import BiletForm, MonthForm
 import datetime
 import calendar
 
@@ -104,6 +104,28 @@ def save_changes(request, id):
         object.save()
         return redirect('/panel')
 
+def month_save_changes(request, type):
+
+    if request.method == "POST":
+        form = MonthForm(request.POST)
+        if form.is_valid():
+            miesiac = form.cleaned_data.get('miesiac')
+            miesiac = "-" + miesiac + "-"
+            if type == 'pj':
+                danes = Dane.objects.filter(data_wyjazdu__contains=miesiac, typ='przepustkę jednorazową')
+            if type == 'urlop':
+                danes = Dane.objects.filter(data_wyjazdu__contains=miesiac, typ='urlop')
+            else:
+                return redirect('/panel')
+
+            for dana in danes:
+                if dana.doniesione == "X":
+                    dana.doniesione = ""
+                else:
+                    dana.doniesione = "X"
+                dana.save()
+    return redirect('/panel')
+
 def record_edit(request, id):
     if request.method == 'POST':
         path = '/admin/generator/dane/' + id + '/change/'
@@ -117,12 +139,13 @@ def panel(request, *args, **kwargs):
     queryset1 = Dane.objects.filter(typ = 'przepustkę jednorazową').order_by('nr_rozkazu', 'nazwisko')
     ordered_queryset1 = queryset1
     queryset2 = Dane.objects.filter(typ = 'urlop').order_by('data_wyjazdu', 'nazwisko')
-
+    form = MonthForm()
     context = {
         "lista": queryset1,
         "lista2":queryset2,
         'fontColor': os.getenv('FONT_COLOR'),
-        'page_title':page_title
+        'page_title':page_title,
+        'month_save_changes':form,
     }
     if request.user.is_superuser:
         return render(request, "panel.html", context)
