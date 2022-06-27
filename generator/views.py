@@ -36,7 +36,7 @@ def home_view(request, *args, **kwargs):
     return render(request, "home.html", context)
     # jesli jest niezalogowany, to wyswietl okrojona wersje
 
-
+@login_required(login_url='/login/')
 def generuj(request):
     page_title = 'Zwrot kosztów dojazdu'
     form = BiletForm()

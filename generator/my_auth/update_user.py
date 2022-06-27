@@ -3,6 +3,7 @@ import os
 # funkcje odpowiedzialne za aktualizację danych użytkownika
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 
@@ -10,6 +11,7 @@ from generator.forms import UpdateProfileForm, UpdateUserForm
 from generator.models import UserProfile
 
 
+@login_required(login_url='/login/')
 def my_update(request):
     updatedUserprofile = request.user.userprofile
 
